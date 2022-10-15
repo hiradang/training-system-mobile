@@ -30,7 +30,11 @@ function Home({navigation}) {
       {subjects && (
         <View style={styles.subjectContainer}>
           {subjects.map((subject, index) => (
-            <Subject key={index} subject={subject} />
+            <Subject
+              key={index}
+              subject={subject}
+              onPress={() => navigation.push('ListExam', {subject: subject})}
+            />
           ))}
         </View>
       )}

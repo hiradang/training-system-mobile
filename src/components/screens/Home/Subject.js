@@ -2,9 +2,15 @@ import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
 function Subject(props) {
+<<<<<<< HEAD
   const {subject} = props;
   return (
     <TouchableOpacity style={styles.container}>
+=======
+  const {subject, onPress} = props;
+  return (
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+>>>>>>> 8e46405... feat: exams list of a subject
       <Text style={styles.title}>{subject.name}</Text>
       <Text style={styles.text}>Số câu hỏi: {subject.name}</Text>
       <Text style={styles.text}>Thời gian: {subject.duration} phút</Text>
