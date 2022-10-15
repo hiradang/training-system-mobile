@@ -1,26 +1,39 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import CustomButton from '../utils/CustomButton';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import CustomButton from '../components/common/CustomButton';
 
-function Start({ navigation }) {
+function Start({navigation}) {
   return (
     <View style={styles.body}>
       <View style={styles.main}>
-        <Image style={styles.image} source={require('../../assets/training-icon.png')}></Image>
+        <Image
+          style={styles.image}
+          source={require('../../assets/training-icon.png')}></Image>
       </View>
       <View style={styles.button}>
         <Text style={styles.text}>
-          Chào mừng đến với Training System. Hy vọng bạn sẽ học thêm được nhiều kiến thức bổ ích!
+          Chào mừng đến với Training System. Hy vọng bạn sẽ học thêm được nhiều
+          kiến thức bổ ích!
         </Text>
         <CustomButton
-          buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
-          textStyles={{ color: 'white' }}
+          buttonStyles={{
+            backgroundColor: '#000000',
+            width: '60%',
+            height: 60,
+            marginTop: 20,
+          }}
+          textStyles={{color: 'white'}}
           text={'Đăng ký'}
           onPressFunc={() => navigation.navigate('Signup')}
         />
         <CustomButton
-          buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
-          textStyles={{ color: 'white' }}
+          buttonStyles={{
+            backgroundColor: '#000000',
+            width: '60%',
+            height: 60,
+            marginTop: 20,
+          }}
+          textStyles={{color: 'white'}}
           text={'Đăng nhập'}
           onPressFunc={() => navigation.navigate('Login')}
         />

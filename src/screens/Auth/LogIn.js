@@ -13,8 +13,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import {Dimensions} from 'react-native';
 
-import Input from '../../utils/Input';
-import CustomButton from '../../utils/CustomButton';
+import Input from '../../components/common/Input';
+import CustomButton from '../../components/common/CustomButton';
 
 function LogIn({navigation}) {
   const [username, setInputUsername] = useState('');
@@ -114,7 +114,7 @@ function LogIn({navigation}) {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#3D67FF',
+    backgroundColor: '#5F7FEF',
     flex: 1,
   },
   back: {

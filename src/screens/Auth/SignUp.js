@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
-import Input from '../../utils/Input';
-import CustomButton from '../../utils/CustomButton';
+import Input from '../../components/common/Input';
+import CustomButton from '../../components/common/CustomButton';
 
-function SignUp({ navigation }) {
+function SignUp({navigation}) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -17,7 +24,7 @@ function SignUp({ navigation }) {
   const [errorPass, setErrorPass] = useState('');
   const [errorCheckPass, setErrorCheckPass] = useState('');
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     if (!value) {
       setErrorEmail('Trường này không được bỏ trống');
     } else if (value.length < 10) {
@@ -31,7 +38,7 @@ function SignUp({ navigation }) {
 
     return false;
   };
-  const validateName = (value) => {
+  const validateName = value => {
     if (!value) {
       setErrorName('Trường này không được bỏ trống');
     } else if (value.length < 10) {
@@ -45,7 +52,7 @@ function SignUp({ navigation }) {
     return false;
   };
 
-  const validatePass = (value) => {
+  const validatePass = value => {
     if (!value) {
       setErrorPass('Trường này không được bỏ trống');
     } else if (value.length < 6) {
@@ -59,7 +66,7 @@ function SignUp({ navigation }) {
     return false;
   };
 
-  const validateCheckPass = (value) => {
+  const validateCheckPass = value => {
     if (!value) {
       setErrorCheckPass('Trường này không được bỏ trống');
     } else if (password !== value) {
@@ -84,7 +91,7 @@ function SignUp({ navigation }) {
           email,
           password,
         })
-        .then((res) => {
+        .then(res => {
           console.log(res.data);
           if (res.data.email) {
             Toast.show({
@@ -111,8 +118,7 @@ function SignUp({ navigation }) {
           style={styles.back}
           onPress={() => {
             navigation.goBack();
-          }}
-        >
+          }}>
           <Ionicons name="chevron-back" size={25} color="#ffffff" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng ký </Text>
@@ -124,7 +130,7 @@ function SignUp({ navigation }) {
           textError={errorEmail}
           error={errorEmail !== ''}
           icon="user"
-          onChangeText={(value) => {
+          onChangeText={value => {
             setEmail(value);
             if (onSubmit) validateEmail(value);
           }}
@@ -136,7 +142,7 @@ function SignUp({ navigation }) {
           icon="user"
           textError={errorName}
           error={errorName !== ''}
-          onChangeText={(value) => {
+          onChangeText={value => {
             setName(value);
             if (onSubmit) validateName(value);
           }}
@@ -150,7 +156,7 @@ function SignUp({ navigation }) {
           error={errorPass !== ''}
           secureTextEntry
           icon="lock"
-          onChangeText={(value) => {
+          onChangeText={value => {
             setPassword(value);
             if (onSubmit) validatePass(value);
           }}
@@ -163,15 +169,20 @@ function SignUp({ navigation }) {
           textError={errorCheckPass}
           error={errorCheckPass !== ''}
           icon="lock"
-          onChangeText={(value) => {
+          onChangeText={value => {
             setCheckPass(value);
             if (onSubmit) validateCheckPass(value);
           }}
         />
         <View style={styles.signup}>
           <CustomButton
-            buttonStyles={{ backgroundColor: '#000000', width: '60%', height: 60, marginTop: 20 }}
-            textStyles={{ color: 'white' }}
+            buttonStyles={{
+              backgroundColor: '#000000',
+              width: '60%',
+              height: 60,
+              marginTop: 20,
+            }}
+            textStyles={{color: 'white'}}
             text={'Đăng ký'}
             onPressFunc={submit}
           />
@@ -183,7 +194,7 @@ function SignUp({ navigation }) {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#3D67FF',
+    backgroundColor: '#5F7FEF',
     flex: 1,
   },
   back: {

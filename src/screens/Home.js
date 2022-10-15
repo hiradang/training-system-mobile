@@ -1,19 +1,58 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, View, Text, StyleSheet} from 'react-native';
+import Input from '../components/common/Input';
+import {subjectApi} from '../services/api';
 
-function Home({ navigation }) {
-  useEffect(() => {}, []);
+import Subject from '../components/screens/Home/Subject';
+
+function Home({navigation}) {
+  const [subjects, setSubjects] = useState([]);
+  const [search, setSearch] = useState([]);
+  useEffect(() => {
+    subjectApi.getSubjects().then(res => {
+      setSubjects(res.data);
+    });
+  }, []);
+
   return (
-    <View style={styles.body}>
-      <Text>Home</Text>
-    </View>
+    <ScrollView style={styles.body}>
+      <Text style={styles.title}>Các khóa học trong hệ thống</Text>
+
+      <Input
+        style={styles.inputSearch}
+        value={search}
+        icon="search"
+        onChangeText={setSearch}
+        placeholder="Tìm kiếm"
+        placeholderTextColor="#000"
+      />
+
+      {subjects && (
+        <View style={styles.subjectContainer}>
+          {subjects.map((subject, index) => (
+            <Subject key={index} subject={subject} />
+          ))}
+        </View>
+      )}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#3D67FF',
+    backgroundColor: '#5F7FEF',
     flex: 1,
+    padding: 20,
+  },
+  title: {
+    fontSize: 20,
+    color: 'white',
+  },
+  inputSearch: {
+    width: '100%',
+  },
+  subjectContainer: {
+    marginTop: -10,
   },
 });
 export default Home;

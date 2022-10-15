@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import {Text, StyleSheet, View} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 
-const Input = (props) => {
+const Input = props => {
   return (
     <View style={[props.style, styles.view]}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Text style={styles.text}>{props.title}</Text>
         <Text style={styles.textInfo}>{props.titleInfo}</Text>
       </View>
@@ -19,7 +19,7 @@ const Input = (props) => {
           placeholder={props.placeholder}
           placeholderTextColor="#7E7E7E"
           secureTextEntry={props.secureTextEntry ? true : false}
-          onChangeText={(value) => props.onChangeText(value)}
+          onChangeText={value => props.onChangeText(value)}
           style={[styles.input, props.error && styles.inputError]}
         />
       </View>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     marginLeft: 40,
-    marginTop: 15
+    marginTop: 15,
   },
   row: {
     height: 50,
