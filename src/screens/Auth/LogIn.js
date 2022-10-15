@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
-import { Dimensions } from 'react-native';
-
+import {Dimensions} from 'react-native';
 
 import Input from '../../utils/Input';
 import CustomButton from '../../utils/CustomButton';
 
-function LogIn({ navigation }) {
+function LogIn({navigation}) {
   const [username, setInputUsername] = useState('');
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
@@ -20,32 +25,34 @@ function LogIn({ navigation }) {
   const submit = () => {
     setOnSubmit(true);
     if (username && password) {
-      axios.post(`${Config.API_URL}/users/login`, { username, password }).then((res) => {
-        if (res.data.error) {
-          Toast.show({
-            type: 'errorToast',
-            text1: res.data.error,
-            visibilityTime: 2000,
-          });
-          //   setErrorText(true);
-        } else {
-          Toast.show({
-            type: 'successToast',
-            text1: 'Đăng nhập thành công',
-            visibilityTime: 2000,
-          });
+      axios
+        .post(`${Config.API_URL}/users/login`, {username, password})
+        .then(res => {
+          if (res.data.error) {
+            Toast.show({
+              type: 'errorToast',
+              text1: res.data.error,
+              visibilityTime: 2000,
+            });
+            //   setErrorText(true);
+          } else {
+            Toast.show({
+              type: 'successToast',
+              text1: 'Đăng nhập thành công',
+              visibilityTime: 2000,
+            });
 
-          // Save to Async Storage
-          // AsyncStorage.setItem(
-          //   'user',
-          //   JSON.stringify({
-          //     username: username,
-          //     name: res.data.name,
-          //   })
-          // ).then(() => {
-          // });
-        }
-      });
+            // Save to Async Storage
+            // AsyncStorage.setItem(
+            //   'user',
+            //   JSON.stringify({
+            //     username: username,
+            //     name: res.data.name,
+            //   })
+            // ).then(() => {
+            // });
+          }
+        });
     } else {
       Toast.show({
         type: 'errorToast',
@@ -61,8 +68,7 @@ function LogIn({ navigation }) {
           style={styles.back}
           onPress={() => {
             navigation.goBack();
-          }}
-        >
+          }}>
           <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
@@ -73,7 +79,7 @@ function LogIn({ navigation }) {
             value={username}
             error={(onSubmit && username === '') || errorText}
             icon="user"
-            onChangeText={(value) => {
+            onChangeText={value => {
               setInputUsername(value);
               setErrorText(false);
             }}
@@ -85,12 +91,17 @@ function LogIn({ navigation }) {
             secureTextEntry
             error={onSubmit && password === ''}
             icon="lock"
-            onChangeText={(value) => setPassword(value)}
+            onChangeText={value => setPassword(value)}
           />
           <View style={styles.LogIn}>
             <CustomButton
-              buttonStyles={{ backgroundColor: '#000000', width: 300, height: 60, marginTop: 20 }}
-              textStyles={{ color: 'white' }}
+              buttonStyles={{
+                backgroundColor: '#000000',
+                width: 300,
+                height: 60,
+                marginTop: 20,
+              }}
+              textStyles={{color: 'white'}}
               text={'Đăng nhập'}
               onPressFunc={submit}
             />
