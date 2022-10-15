@@ -13,6 +13,8 @@ import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
 import Home from './screens/Home';
+import ListExam from './screens/ListExam';
+import Setting from './screens/Setting';
 
 const Stack = createStackNavigator();
 
@@ -147,8 +149,33 @@ const App = () => {
         <Stack.Screen
           name="Training System"
           component={Home}
+          options={({navigation}) => ({
+            headerShown: true,
+            headerRight: () => (
+              <AntDesign
+                name="setting"
+                size={30}
+                style={{marginRight: 20}}
+                color="black"
+                onPress={() => navigation.navigate('Setting')}
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="ListExam"
+          component={ListExam}
           options={{
             headerShown: true,
+            title: 'Training System',
+          }}
+        />
+        <Stack.Screen
+          name="Setting"
+          component={Setting}
+          options={{
+            headerShown: true,
+            title: 'Cài đặt',
           }}
         />
       </Stack.Navigator>

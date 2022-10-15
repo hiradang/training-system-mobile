@@ -2,9 +2,9 @@ import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
 function Subject(props) {
-  const {subject} = props;
+  const {subject, onPress} = props;
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.title}>{subject.name}</Text>
       <Text style={styles.text}>Số câu hỏi: {subject.name}</Text>
       <Text style={styles.text}>Thời gian: {subject.duration} phút</Text>
