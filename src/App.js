@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text} from 'react-native';
 import axios from 'axios';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -12,11 +12,12 @@ import Splash from './screens/Splash';
 import Start from './screens/Start';
 import SignUp from './screens/Auth/SignUp';
 import LogIn from './screens/Auth/LogIn';
+import Home from './screens/Home';
 
 const Stack = createStackNavigator();
 
 const toastConfig = {
-  successToast: ({ text1 }) => (
+  successToast: ({text1}) => (
     <View
       style={{
         display: 'flex',
@@ -31,14 +32,20 @@ const toastConfig = {
         borderLeftColor: '#4BB543',
         borderLeftWidth: 8,
         elevation: 2,
-      }}
-    >
-      <AntDesign name="checkcircleo" size={24} color="#4BB543" style={{ marginHorizontal: 12 }} />
-      <Text style={{ fontSize: 16, fontWeight: '500', color: '#4BB543' }}>{text1}</Text>
+      }}>
+      <AntDesign
+        name="checkcircleo"
+        size={24}
+        color="#4BB543"
+        style={{marginHorizontal: 12}}
+      />
+      <Text style={{fontSize: 16, fontWeight: '500', color: '#4BB543'}}>
+        {text1}
+      </Text>
     </View>
   ),
 
-  errorToast: ({ text1 }) => (
+  errorToast: ({text1}) => (
     <View
       style={{
         display: 'flex',
@@ -53,14 +60,20 @@ const toastConfig = {
         borderLeftColor: '#ff3333',
         borderLeftWidth: 8,
         elevation: 2,
-      }}
-    >
-      <AntDesign name="closecircleo" size={24} color="#ff3333" style={{ marginHorizontal: 12 }} />
-      <Text style={{ fontSize: 16, fontWeight: '500', color: '#ff3333' }}>{text1}</Text>
+      }}>
+      <AntDesign
+        name="closecircleo"
+        size={24}
+        color="#ff3333"
+        style={{marginHorizontal: 12}}
+      />
+      <Text style={{fontSize: 16, fontWeight: '500', color: '#ff3333'}}>
+        {text1}
+      </Text>
     </View>
   ),
 
-  disableToast: ({ text1 }) => (
+  disableToast: ({text1}) => (
     <View
       style={{
         display: 'flex',
@@ -75,15 +88,16 @@ const toastConfig = {
         borderLeftColor: '#cccccc',
         borderLeftWidth: 8,
         elevation: 2,
-      }}
-    >
+      }}>
       <MaterialIcons
         name="do-not-touch"
         size={24}
         color="#cccccc"
-        style={{ marginHorizontal: 12 }}
+        style={{marginHorizontal: 12}}
       />
-      <Text style={{ fontSize: 16, fontWeight: '500', color: '#cccccc' }}>{text1}</Text>
+      <Text style={{fontSize: 16, fontWeight: '500', color: '#cccccc'}}>
+        {text1}
+      </Text>
     </View>
   ),
 };
@@ -91,8 +105,8 @@ const toastConfig = {
 const App = () => {
   const [userParse, setUserParse] = useState();
   useEffect(() => {
-    AsyncStorage.getItem('user').then((user) => {
-      axios.interceptors.request.use((config) => {
+    AsyncStorage.getItem('user').then(user => {
+      axios.interceptors.request.use(config => {
         config.headers.authorization = JSON.parse(user);
         return config;
       });
@@ -130,7 +144,13 @@ const App = () => {
             headerShown: false,
           }}
         />
-        
+        <Stack.Screen
+          name="Training System"
+          component={Home}
+          options={{
+            headerShown: true,
+          }}
+        />
       </Stack.Navigator>
       <Toast config={toastConfig} />
     </NavigationContainer>

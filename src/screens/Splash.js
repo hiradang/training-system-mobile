@@ -1,13 +1,12 @@
-
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, {useEffect} from 'react';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function Splash({ navigation }) {
+function Splash({navigation}) {
   useEffect(() => {
     setTimeout(() => {
-      AsyncStorage.getItem('user').then((user) => {
-        if (!JSON.parse(user)) navigation.navigate('Start');
+      AsyncStorage.getItem('user').then(user => {
+        if (!JSON.parse(user)) navigation.navigate('Training System');
         else {
           const data = JSON.parse(user);
         }
@@ -17,7 +16,9 @@ function Splash({ navigation }) {
   return (
     <View style={styles.body}>
       <View style={styles.main}>
-        <Image style={styles.image} source={require('../../assets/training-icon.png')}></Image>
+        <Image
+          style={styles.image}
+          source={require('../../assets/training-icon.png')}></Image>
         <Text style={styles.text}>Training System</Text>
       </View>
     </View>
@@ -26,7 +27,7 @@ function Splash({ navigation }) {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#3D67FF',
+    backgroundColor: '#5F7FEF',
     flex: 1,
   },
   main: {
