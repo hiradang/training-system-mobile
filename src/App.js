@@ -15,6 +15,8 @@ import LogIn from './screens/Auth/LogIn';
 import Home from './screens/Home';
 import ListExam from './screens/ListExam';
 import Setting from './screens/Setting';
+import ExamHistory from './screens/ExamHistory';
+import JoinExam from './screens/JoinExam';
 
 const Stack = createStackNavigator();
 
@@ -165,10 +167,14 @@ const App = () => {
         <Stack.Screen
           name="ListExam"
           component={ListExam}
-          options={{
+          options={({route}) => ({
             headerShown: true,
-            title: 'Training System',
-          }}
+            title: route.params.title,
+            upperCaseLabel: true,
+            headerTitleStyle: {
+              textTransform: 'capitalize',
+            },
+          })}
         />
         <Stack.Screen
           name="Setting"
@@ -177,6 +183,28 @@ const App = () => {
             headerShown: true,
             title: 'Cài đặt',
           }}
+        />
+        <Stack.Screen
+          name="ExamHistory"
+          component={ExamHistory}
+          options={({route}) => ({
+            headerShown: true,
+            title: route.params.title,
+            headerTitleStyle: {
+              textTransform: 'capitalize',
+            },
+          })}
+        />
+        <Stack.Screen
+          name="JoinExam"
+          component={JoinExam}
+          options={({route}) => ({
+            headerShown: true,
+            title: route.params.title,
+            headerTitleStyle: {
+              textTransform: 'capitalize',
+            },
+          })}
         />
       </Stack.Navigator>
       <Toast config={toastConfig} />

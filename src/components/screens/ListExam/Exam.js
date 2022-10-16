@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {EXAM_STATUS} from '../../../constants';
 
 function Exam(props) {
-  const {subject, exam} = props;
+  const {subject, exam, onPress} = props;
   const [examStatus, setExamStatus] = useState();
   const [examStatusClass, setExamStatusClass] = useState();
 
@@ -20,7 +20,7 @@ function Exam(props) {
     } else setExamStatus('');
   }, []);
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.wrapper}>
         <Text style={styles.subjectName}>{subject.name}</Text>
         <Text style={[styles[examStatusClass], styles.examStatus]}>
@@ -28,14 +28,20 @@ function Exam(props) {
         </Text>
       </View>
       <View>
-        <Text style={styles.text}>Ngày thi: {exam.date}</Text>
+        {exam.status === EXAM_STATUS.READY ? (
+          <Text style={styles.text}>Ngày tạo: {exam.date}</Text>
+        ) : (
+          <Text style={styles.text}>Ngày thi: {exam.date}</Text>
+        )}
       </View>
-      <View>
-        <Text style={styles.text}>
-          Điểm: {exam.score}/{subject.score_pass}
-        </Text>
-      </View>
-    </View>
+      {exam.score && (
+        <View>
+          <Text style={styles.text}>
+            Điểm: {exam.score}/{subject.score_pass}
+          </Text>
+        </View>
+      )}
+    </TouchableOpacity>
   );
 }
 

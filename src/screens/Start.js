@@ -8,7 +8,7 @@ function Start({navigation}) {
       <View style={styles.main}>
         <Image
           style={styles.image}
-          source={require('../../assets/training-icon.png')}></Image>
+          source={require('../../assets/img/training-icon.png')}></Image>
       </View>
       <View style={styles.button}>
         <Text style={styles.text}>
