@@ -33,7 +33,12 @@ function Home({navigation}) {
             <Subject
               key={index}
               subject={subject}
-              onPress={() => navigation.push('ListExam', {subject: subject})}
+              onPress={() =>
+                navigation.push('ListExam', {
+                  subject: subject,
+                  title: subject.name,
+                })
+              }
             />
           ))}
         </View>

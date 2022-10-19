@@ -18,7 +18,8 @@ function Splash({navigation}) {
       <View style={styles.main}>
         <Image
           style={styles.image}
-          source={require('../../assets/training-icon.png')}></Image>
+          source={require('../../assets/img/training-icon.png')}
+        />
         <Text style={styles.text}>Training System</Text>
       </View>
     </View>

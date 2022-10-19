@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {subjectApi} from '../services/api';
+import {EXAM_STATUS} from '../constants';
 
 import CustomButton from '../components/common/CustomButton';
 import SubjectInfo from '../components/screens/ListExam/SubjectInfo';
 import Exam from '../components/screens/ListExam/Exam';
 
-function ListExam({route}) {
+function ListExam({route, navigation}) {
   const {subject} = route.params;
   const [exams, setExams] = useState([]);
 
   const fakeExams = [
+    {
+      date: '13/10/2022',
+      status: -1,
+    },
     {
       date: '13/10/2022',
       score: 8,
@@ -27,6 +32,21 @@ function ListExam({route}) {
       status: 0,
     },
   ];
+
+  const examOnPress = exam => {
+    if (exam.status === EXAM_STATUS.READY) {
+      navigation.navigate('JoinExam', {
+        subject: subject,
+        exam: exam,
+        title: subject.name,
+      });
+    } else if (
+      exam.status === EXAM_STATUS.FAILED ||
+      exam.status === EXAM_STATUS.PASS
+    ) {
+      navigation.navigate('ExamHistory', {title: subject.name});
+    }
+  };
 
   useEffect(() => {
     setExams(fakeExams);
@@ -50,7 +70,12 @@ function ListExam({route}) {
 
       {exams &&
         exams.map((exam, index) => (
-          <Exam key={index} subject={subject} exam={exam} />
+          <Exam
+            key={index}
+            subject={subject}
+            exam={exam}
+            onPress={() => examOnPress(exam)}
+          />
         ))}
     </ScrollView>
   );
