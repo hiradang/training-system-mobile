@@ -5,7 +5,7 @@ import {TextInput} from 'react-native-gesture-handler';
 
 const Input = props => {
   return (
-    <View style={[props.style, styles.view]}>
+    <View style={[ styles.view, props.style]}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Text style={styles.text}>{props.title}</Text>
         <Text style={styles.textInfo}>{props.titleInfo}</Text>

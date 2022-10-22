@@ -1,19 +1,15 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, ScrollView } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Input from '../components/common/Input';
 import Toast from 'react-native-toast-message';
-import Input from '../../components/common/Input';
-import CustomButton from '../../components/common/CustomButton';
-import { AuthApi } from '../../services/api';
+import Config from 'react-native-config';
+import CustomButton from '../components/common/CustomButton';
+import { profileApi } from '../services/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function SignUp({navigation}) {
+function EditProfile() {
+
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -84,50 +80,37 @@ function SignUp({navigation}) {
     }
     return false;
   };
-
-  const submit = () => {
-    setOnSubmit(true);
-    const valid1 = validateEmail(email);
-    const valid2 = validateName(name);
-    const valid3 = validatePass(password);
-    const valid4 = validateCheckPass(checkPass);
-    if (valid1 && valid2 && valid3 && valid4) {
-      AuthApi.signup(name, email, password)
-        .then(res => {
-          console.log(res.data);
-          if (res.data.email) {
-            Toast.show({
-              type: 'errorToast',
-              text1: 'Email đã tồn tại',
-              visibilityTime: 2000,
-            });
-            setErrorEmail('Email đã tồn tại');
-          } else {
-            Toast.show({
-              type: 'successToast',
-              text1: 'Đăng ký thành công',
-              visibilityTime: 2000,
-            });
-            // navigation.navigate('Login');
-          }
-        });
+  useEffect(() => {
+    let idUser;
+    AsyncStorage.getItem('user').then(user => {
+      if (JSON.parse(user)) {
+        idUser = JSON.parse(user).user_id
+      }
+    })
+    if (idUser) {
+      profileApi.getInfoProfile(idUser).then((res) => {
+        console.log(res)
+      })
     }
+  }, [])
+  const submit = () => {
+
+    Toast.show({
+      type: 'successToast',
+      text1: 'Thay đổi thành công',
+      visibilityTime: 2000,
+    });
   };
+
   return (
-    <View style={styles.body}>
+    <View style={styles.container}>
       <ScrollView>
-        <TouchableOpacity
-          style={styles.back}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Ionicons name="chevron-back" size={25} color="#ffffff" />
-        </TouchableOpacity>
-        <Text style={styles.text}>Đăng ký </Text>
-        <Input
+
+      <Input
           title="Email"
           placeholder="Email"
           value={email}
+          style = {{marginTop: 20}}
           textError={errorEmail}
           error={errorEmail !== ''}
           icon="user"
@@ -141,6 +124,7 @@ function SignUp({navigation}) {
           placeholder="Tên người dùng"
           value={name}
           icon="user"
+          style = {{marginTop: -5}}
           textError={errorName}
           error={errorName !== ''}
           onChangeText={value => {
@@ -151,10 +135,10 @@ function SignUp({navigation}) {
         <Input
           title="Mật khẩu"
           placeholder="Mật khẩu"
-          titleInfo="(tối thiểu 6 kí tự)"
           value={password}
           textError={errorPass}
           error={errorPass !== ''}
+          style = {{marginTop: -5}}
           secureTextEntry
           icon="lock"
           onChangeText={value => {
@@ -163,7 +147,21 @@ function SignUp({navigation}) {
           }}
         />
         <Input
-          title="Xác nhận mật khẩu"
+          title="Xác nhận mật khẩu mới"
+          placeholder="Mật khẩu"
+          value={checkPass}
+          secureTextEntry
+          style = {{marginTop: -5}}
+          textError={errorCheckPass}
+          error={errorCheckPass !== ''}
+          icon="lock"
+          onChangeText={value => {
+            setCheckPass(value);
+            if (onSubmit) validateCheckPass(value);
+          }}
+        />
+         <Input
+          title="Mật khẩu hiện tại"
           placeholder="Mật khẩu"
           value={checkPass}
           secureTextEntry
@@ -175,16 +173,16 @@ function SignUp({navigation}) {
             if (onSubmit) validateCheckPass(value);
           }}
         />
-        <View style={styles.signup}>
+        <View style={styles.saveButton}>
           <CustomButton
             buttonStyles={{
               backgroundColor: '#000000',
-              width: '60%',
+              width: 350,
               height: 60,
-              marginTop: 20,
+              marginTop: 10,
             }}
-            textStyles={{color: 'white'}}
-            text={'Đăng ký'}
+            textStyles={{ color: 'white' }}
+            text={'Lưu thay đổi'}
             onPressFunc={submit}
           />
         </View>
@@ -194,26 +192,68 @@ function SignUp({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    backgroundColor: '#5F7FEF',
-    flex: 1,
+  container: {
+    backgroundColor: '#3D67FF',
+    height: '100%',
+    textAlign: 'center',
   },
-  back: {
-    marginLeft: 20,
-    marginTop: Dimensions.get('window').height * 0.05,
+  imageContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 50,
+    marginBottom: 50,
   },
-  text: {
-    fontSize: 32,
-    color: '#ffffff',
-    marginTop: 10,
-    marginLeft: 20,
-    marginBottom: Dimensions.get('window').height * 0.05,
-    fontWeight: '500',
+  image: {
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+
+    borderWidth: 1,
+    borderColor: '#CCD4F3',
   },
-  signup: {
-    marginTop: Dimensions.get('window').height * 0.01,
+  editIconContainer: {
+    backgroundColor: 'white',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    right: -16,
+    top: 50,
+  },
+  row: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: 'white',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  icon: {
+    position: 'absolute',
+    left: 20,
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    backgroundColor: 'white',
+    fontSize: 20,
+    borderRadius: 20,
+    paddingHorizontal: 60,
+  },
+  saveButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
-export default SignUp;
+export default EditProfile;

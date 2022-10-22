@@ -6,9 +6,9 @@ function Splash({navigation}) {
   useEffect(() => {
     setTimeout(() => {
       AsyncStorage.getItem('user').then(user => {
-        if (!JSON.parse(user)) navigation.replace('Training System');
+        if (!JSON.parse(user)) navigation.replace('Start');
         else {
-          const data = JSON.parse(user);
+          navigation.replace('Training System');
         }
       });
     }, 2000);

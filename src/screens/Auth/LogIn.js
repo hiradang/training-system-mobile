@@ -15,23 +15,54 @@ import {Dimensions} from 'react-native';
 
 import Input from '../../components/common/Input';
 import CustomButton from '../../components/common/CustomButton';
+import { AuthApi } from '../../services/api';
 
-function LogIn({navigation}) {
-  const [username, setInputUsername] = useState('');
+function LogIn({ navigation }) {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
-  const [errorText, setErrorText] = useState(false);
+  const [errorEmail, setErrorEmail] = useState('');
+  const [errorPass, setErrorPass] = useState('');
+
+  const validateEmail = (value) => {
+    if (!value) {
+      setErrorEmail('Trường này không được bỏ trống');
+    } else {
+      const check = value
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+      if (check) {
+        setErrorEmail('');
+        return true;
+      } else setErrorEmail('Email không hợp lệ');
+    }
+
+    return false;
+  };
+
+  const validatePass = (value) => {
+    if (!value) {
+      setErrorPass('Trường này không được bỏ trống');
+    } else {
+      setErrorPass('');
+      return true;
+    }
+    return false;
+  };
 
   const submit = () => {
     setOnSubmit(true);
-    if (username && password) {
-      axios
-        .post(`${Config.API_URL}/users/login`, {username, password})
-        .then(res => {
-          if (res.data.error) {
+    const valid1 = validateEmail(email);
+    const valid2 = validatePass(password);
+    if (valid1 && valid2) {
+      AuthApi.login(email, password)
+        .then((res) => {
+          if (res.data.notice) {
             Toast.show({
               type: 'errorToast',
-              text1: res.data.error,
+              text1: res.data.notice,
               visibilityTime: 2000,
             });
             //   setErrorText(true);
@@ -43,22 +74,18 @@ function LogIn({navigation}) {
             });
 
             // Save to Async Storage
-            // AsyncStorage.setItem(
-            //   'user',
-            //   JSON.stringify({
-            //     username: username,
-            //     name: res.data.name,
-            //   })
-            // ).then(() => {
-            // });
+            AsyncStorage.setItem(
+              'user',
+              JSON.stringify({
+                user_id: res.data.user_id,
+                email: res.data.email,
+                name: res.data.name,
+              })
+            ).then(() => {
+              navigation.replace("Training System")
+            });
           }
         });
-    } else {
-      Toast.show({
-        type: 'errorToast',
-        text1: 'Bạn chưa điền đầy đủ thông tin',
-        visibilityTime: 2000,
-      });
     }
   };
   return (
@@ -68,40 +95,41 @@ function LogIn({navigation}) {
           style={styles.back}
           onPress={() => {
             navigation.goBack();
-          }}>
+          }}
+        >
           <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
         <View style={styles.container}>
           <Input
-            title="Tên đăng nhập"
-            placeholder="Tên đăng nhập"
-            value={username}
-            error={(onSubmit && username === '') || errorText}
+            title="Email"
+            placeholder="Email"
+            value={email}
+            textError={errorEmail}
+            error={errorEmail !== ''}
             icon="user"
-            onChangeText={value => {
-              setInputUsername(value);
-              setErrorText(false);
+            onChangeText={(value) => {
+              setEmail(value);
+              if (onSubmit) validateEmail(value);
             }}
           />
           <Input
             title="Mật khẩu"
             placeholder="Mật khẩu"
             value={password}
+            textError={errorPass}
+            error={errorPass !== ''}
             secureTextEntry
-            error={onSubmit && password === ''}
             icon="lock"
-            onChangeText={value => setPassword(value)}
+            onChangeText={(value) => {
+              setPassword(value);
+              if (onSubmit) validatePass(value);
+            }}
           />
           <View style={styles.LogIn}>
             <CustomButton
-              buttonStyles={{
-                backgroundColor: '#000000',
-                width: 300,
-                height: 60,
-                marginTop: 20,
-              }}
-              textStyles={{color: 'white'}}
+              buttonStyles={{ backgroundColor: '#000000', width: 300, height: 60, marginTop: 20 }}
+              textStyles={{ color: 'white' }}
               text={'Đăng nhập'}
               onPressFunc={submit}
             />
@@ -114,12 +142,12 @@ function LogIn({navigation}) {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#5F7FEF',
+    backgroundColor: '#3D67FF',
     flex: 1,
   },
   back: {
     marginLeft: 20,
-    marginTop: Dimensions.get('window').height * 0.1,
+    marginTop: Dimensions.get('window').height * 0.05,
   },
   text: {
     fontSize: 32,
@@ -133,7 +161,7 @@ const styles = StyleSheet.create({
     // marginTop: Dimensions.get('window').height * 0.05,
   },
   LogIn: {
-    marginTop: Dimensions.get('window').height * 0.2,
+    marginTop: Dimensions.get('window').height * 0.1,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

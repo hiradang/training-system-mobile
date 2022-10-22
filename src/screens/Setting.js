@@ -1,19 +1,45 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
-import {subjectApi} from '../services/api';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {RadioButton} from 'react-native-paper';
+import ConfirmationModal from '../components/common/ConfirmModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Setting({navigation}) {
   const [language, setLanguage] = useState('Vietnamese');
+  const [showModal, setShowModal] = useState(false);
+
+  const logOut = () => {
+    setShowModal(false);
+    AsyncStorage.clear();
+    navigation.navigate('Start');
+  };
+
+  const cancelLogOut = () => {
+    setShowModal(false);
+  };
   return (
     <ScrollView style={styles.body}>
+      {showModal ? (
+        <ConfirmationModal
+          showModal={showModal}
+          negativeFunc={logOut}
+          cancelFunc={cancelLogOut}
+          positiveFunc={cancelLogOut}
+          header="Đăng xuất"
+          message="Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này?"
+          negativeMessage="Đồng ý"
+          positiveMessage="Ở lại"
+        />
+      ) : null}
       <View style={styles.itemWrapper}>
         <Text style={styles.title}>Tài khoản</Text>
         <View style={styles.infoWrapper}>
           <View style={styles.rowWrapper}>
             <Text style={styles.text}>Chỉnh sửa profile</Text>
-            <FontAwesome name="pencil" color="#14D39A" size={24} />
+            <FontAwesome name="pencil" color="#14D39A" size={24} 
+            onPress={() => navigation.navigate('EditProfile')}/>
           </View>
         </View>
       </View>
@@ -54,8 +80,14 @@ function Setting({navigation}) {
       <View style={styles.itemWrapper}>
         <Text style={styles.title}>Phiên đăng nhập</Text>
         <View style={styles.infoWrapper}>
-          <View>
+          <View style={[styles.rowWrapper]}>
             <Text style={[styles.text, styles.logOutText]}>Đăng xuất</Text>
+            <MaterialIcons
+              size={24}
+              color="#E46B6B"
+              name="logout"
+              onPress={() => setShowModal(true)}
+            />
           </View>
         </View>
       </View>
