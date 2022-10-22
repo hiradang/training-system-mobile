@@ -65,7 +65,7 @@ function SignUp({navigation}) {
     } else if (value.length < 6) {
       setErrorPass('Mật khẩu quá ngắn(tối thiểu 6 kí tự)');
     } else if (value.length > 20) {
-      setErrorName('Mật khẩu quá dài');
+      setErrorPass('Mật khẩu quá dài');
     } else {
       setErrorPass('');
       return true;
@@ -108,7 +108,7 @@ function SignUp({navigation}) {
               text1: 'Đăng ký thành công',
               visibilityTime: 2000,
             });
-            // navigation.navigate('Login');
+            navigation.replace('Login');
           }
         });
     }
