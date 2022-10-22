@@ -3,7 +3,7 @@ import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {questionApi} from '../services/api';
 import Question from '../components/screens/ExamHistory/Question';
 
-function ExamHistory({route}) {
+function DoExam({route}) {
   const {examId} = route.params;
   const [questions, setQuestions] = useState([]);
 
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default ExamHistory;
+export default DoExam;

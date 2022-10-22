@@ -1,37 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
-import {subjectApi} from '../services/api';
+import {examApi} from '../services/api';
 import {EXAM_STATUS} from '../constants';
 
 import CustomButton from '../components/common/CustomButton';
 import SubjectInfo from '../components/screens/ListExam/SubjectInfo';
 import Exam from '../components/screens/ListExam/Exam';
+import Toast from 'react-native-toast-message';
 
 function ListExam({route, navigation}) {
-  const {subject} = route.params;
+  const {subject, userId} = route.params;
   const [exams, setExams] = useState([]);
-
-  const fakeExams = [
-    {
-      date: '13/10/2022',
-      status: -1,
-    },
-    {
-      date: '13/10/2022',
-      score: 8,
-      status: 1,
-    },
-    {
-      date: '12/10/2022',
-      score: 4,
-      status: 0,
-    },
-    {
-      date: '11/10/2022',
-      score: 2,
-      status: 0,
-    },
-  ];
 
   const examOnPress = exam => {
     if (exam.status === EXAM_STATUS.READY) {
@@ -44,19 +23,39 @@ function ListExam({route, navigation}) {
       exam.status === EXAM_STATUS.FAILED ||
       exam.status === EXAM_STATUS.PASS
     ) {
-      navigation.navigate('ExamHistory', {title: subject.name});
+      navigation.navigate('ExamHistory', {
+        title: subject.name,
+        examId: exam.id,
+      });
     }
   };
 
   useEffect(() => {
-    setExams(fakeExams);
+    examApi.getListExams(subject.id, userId).then(res => {
+      setExams(res.data);
+    });
   }, []);
+
+  const creatNewExam = () => {
+    examApi.createExam(subject.id, userId).then(res => {
+      const newExam = {...res.data, status: 'ready'};
+      const newExams = [newExam, ...exams];
+      setExams(newExams);
+      Toast.show({
+        type: 'successToast',
+        text1: 'Tạo bài thi mới thành công',
+        visibilityTime: 2000,
+      });
+    });
+  };
+
   return (
     <ScrollView style={styles.body}>
       <SubjectInfo subject={subject} />
       <View style={styles.button}>
         <CustomButton
           text="Luyện tập"
+          onPressFunc={creatNewExam}
           textStyles={{color: 'white'}}
           buttonStyles={{
             backgroundColor: '#000000',
@@ -68,7 +67,7 @@ function ListExam({route, navigation}) {
         />
       </View>
 
-      {exams &&
+      {exams.length > 0 ? (
         exams.map((exam, index) => (
           <Exam
             key={index}
@@ -76,7 +75,12 @@ function ListExam({route, navigation}) {
             exam={exam}
             onPress={() => examOnPress(exam)}
           />
-        ))}
+        ))
+      ) : (
+        <View>
+          <Text style={styles.noExamText}>Bạn chưa làm bài thi nào.</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -88,6 +92,12 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
+  },
+  noExamText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#fff',
+    marginTop: 30,
   },
 });
 export default ListExam;

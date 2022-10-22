@@ -3,7 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import ExamInfo from '../components/screens/JoinExam/ExamInfo';
 import CustomButton from '../components/common/CustomButton';
 
-function JoinExam({route}) {
+function JoinExam({route, navigation}) {
   const {subject, exam} = route.params;
   return (
     <View style={styles.container}>
@@ -16,6 +16,12 @@ function JoinExam({route}) {
         <CustomButton
           text="Bắt đầu"
           textStyles={{color: 'white'}}
+          onPressFunc={() =>
+            navigation.navigate('DoExam', {
+              title: subject.name,
+              examId: exam.id,
+            })
+          }
           buttonStyles={{
             backgroundColor: '#000000',
             width: '80%',

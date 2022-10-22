@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import CheckboxQuestion from './CheckboxQuestion';
 import RadioQuestion from './RadioQuestion';
+import {QUESTION_TYPE} from '../../../constants';
 
 function Question(props) {
   const {question, index} = props;
@@ -9,7 +10,7 @@ function Question(props) {
     <View style={styles.container}>
       <View>
         <Text style={styles.questionContent}>
-          Câu hỏi {index + 1}: {question.questionContent}
+          Câu hỏi {index + 1}: {question.question_content}
         </Text>
         {question.image && (
           <Image
@@ -19,10 +20,10 @@ function Question(props) {
             }}
           />
         )}
-        {question.type === 'checkbox' ? (
-          <CheckboxQuestion answers={question.answers} />
+        {question.type === QUESTION_TYPE.CHECKBOX ? (
+          <CheckboxQuestion answers={question.list_ans} />
         ) : (
-          <RadioQuestion answers={question.answers} />
+          <RadioQuestion answers={question.list_ans} />
         )}
         {question.status ? (
           <View>

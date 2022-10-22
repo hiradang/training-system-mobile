@@ -1,8 +1,8 @@
-export const SET_CURRENT_COURSE_NAME = 'SET_CURRENT_COURSE_NAME';
+export const SET_USER_ID = 'SET_USER_ID';
 
-export const setCurrentCourseName = currentCourseName => dispatch => {
+export const setUserId = userId => dispatch => {
   dispatch({
-    type: SET_CURRENT_COURSE_NAME,
-    payload: currentCourseName,
+    type: SET_USER_ID,
+    payload: userId,
   });
 };

@@ -1,5 +1,10 @@
 export const EXAM_STATUS = {
-  FAILED: 0,
-  PASS: 1,
-  READY: -1,
+  FAILED: 'failed',
+  PASS: 'passed',
+  READY: 'ready',
+};
+
+export const QUESTION_TYPE = {
+  RADIO: 0,
+  CHECKBOX: 1,
 };

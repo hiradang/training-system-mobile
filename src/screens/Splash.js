@@ -2,12 +2,19 @@ import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {useDispatch} from 'react-redux';
+import {setUserId} from '../redux/actions';
+
 function Splash({navigation}) {
+  const dispatch = useDispatch();
   useEffect(() => {
     setTimeout(() => {
       AsyncStorage.getItem('user').then(user => {
-        if (!JSON.parse(user)) navigation.replace('Start');
+        const userObject = JSON.parse(user);
+        // console.log(userObject);
+        if (!userObject) navigation.replace('Start');
         else {
+          dispatch(setUserId(userObject.user_id));
           navigation.replace('Training System');
         }
       });

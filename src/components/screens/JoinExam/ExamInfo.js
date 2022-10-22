@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {convertDate} from '../../../utils/converDate';
 
 function ExamInfo(props) {
   const {subject, exam} = props;
@@ -22,8 +23,8 @@ function ExamInfo(props) {
         <Text style={styles.text}>{subject.score_pass}</Text>
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>Điểm đạt: </Text>
-        <Text style={styles.text}>{exam.date}</Text>
+        <Text style={styles.title}>Ngày tạo: </Text>
+        <Text style={styles.text}>{convertDate(exam.created_at)}</Text>
       </View>
     </View>
   );

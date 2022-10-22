@@ -6,32 +6,34 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Config from 'react-native-config';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import {Dimensions} from 'react-native';
 
+import {useDispatch} from 'react-redux';
+import {setUserId} from '../../redux/actions';
+
 import Input from '../../components/common/Input';
 import CustomButton from '../../components/common/CustomButton';
-import { AuthApi } from '../../services/api';
+import {AuthApi} from '../../services/api';
 
-function LogIn({ navigation }) {
+function LogIn({navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPass, setErrorPass] = useState('');
+  const dispatch = useDispatch();
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     if (!value) {
       setErrorEmail('Trường này không được bỏ trống');
     } else {
       const check = value
         .toLowerCase()
         .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         );
       if (check) {
         setErrorEmail('');
@@ -42,7 +44,7 @@ function LogIn({ navigation }) {
     return false;
   };
 
-  const validatePass = (value) => {
+  const validatePass = value => {
     if (!value) {
       setErrorPass('Trường này không được bỏ trống');
     } else {
@@ -57,35 +59,37 @@ function LogIn({ navigation }) {
     const valid1 = validateEmail(email);
     const valid2 = validatePass(password);
     if (valid1 && valid2) {
-      AuthApi.login(email, password)
-        .then((res) => {
-          if (res.data.notice) {
-            Toast.show({
-              type: 'errorToast',
-              text1: res.data.notice,
-              visibilityTime: 2000,
-            });
-            //   setErrorText(true);
-          } else {
-            Toast.show({
-              type: 'successToast',
-              text1: 'Đăng nhập thành công',
-              visibilityTime: 2000,
-            });
+      AuthApi.login(email, password).then(res => {
+        if (res.data.notice) {
+          Toast.show({
+            type: 'errorToast',
+            text1: res.data.notice,
+            visibilityTime: 2000,
+          });
+          //   setErrorText(true);
+        } else {
+          Toast.show({
+            type: 'successToast',
+            text1: 'Đăng nhập thành công',
+            visibilityTime: 2000,
+          });
 
-            // Save to Async Storage
-            AsyncStorage.setItem(
-              'user',
-              JSON.stringify({
-                user_id: res.data.user_id,
-                email: res.data.email,
-                name: res.data.name,
-              })
-            ).then(() => {
-              navigation.replace("Training System")
-            });
-          }
-        });
+          // Save to redux
+          dispatch(setUserId(res.data.user_id));
+
+          // Save to Async Storage
+          AsyncStorage.setItem(
+            'user',
+            JSON.stringify({
+              user_id: res.data.user_id,
+              email: res.data.email,
+              name: res.data.name,
+            }),
+          ).then(() => {
+            navigation.replace('Training System');
+          });
+        }
+      });
     }
   };
   return (
@@ -95,8 +99,7 @@ function LogIn({ navigation }) {
           style={styles.back}
           onPress={() => {
             navigation.goBack();
-          }}
-        >
+          }}>
           <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}>Đăng nhập</Text>
@@ -108,7 +111,7 @@ function LogIn({ navigation }) {
             textError={errorEmail}
             error={errorEmail !== ''}
             icon="user"
-            onChangeText={(value) => {
+            onChangeText={value => {
               setEmail(value);
               if (onSubmit) validateEmail(value);
             }}
@@ -121,15 +124,20 @@ function LogIn({ navigation }) {
             error={errorPass !== ''}
             secureTextEntry
             icon="lock"
-            onChangeText={(value) => {
+            onChangeText={value => {
               setPassword(value);
               if (onSubmit) validatePass(value);
             }}
           />
           <View style={styles.LogIn}>
             <CustomButton
-              buttonStyles={{ backgroundColor: '#000000', width: 300, height: 60, marginTop: 20 }}
-              textStyles={{ color: 'white' }}
+              buttonStyles={{
+                backgroundColor: '#000000',
+                width: 300,
+                height: 60,
+                marginTop: 20,
+              }}
+              textStyles={{color: 'white'}}
               text={'Đăng nhập'}
               onPressFunc={submit}
             />

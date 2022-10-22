@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import Input from '../components/common/Input';
 import {subjectApi} from '../services/api';
-
 import Subject from '../components/screens/Home/Subject';
+import {useSelector} from 'react-redux';
 
 function Home({navigation}) {
   const [subjects, setSubjects] = useState([]);
   const [search, setSearch] = useState('');
+  const {userId} = useSelector(state => state.taskReducer);
   useEffect(() => {
-    subjectApi.getSubjects({'q%5Bname%5D': search}).then(res => {
-      console.log('running');
+    subjectApi.getSubjects({name: search}).then(res => {
       setSubjects(res.data);
     });
   }, [search]);
@@ -38,6 +38,7 @@ function Home({navigation}) {
                 navigation.push('ListExam', {
                   subject: subject,
                   title: subject.name,
+                  userId: userId,
                 })
               }
             />

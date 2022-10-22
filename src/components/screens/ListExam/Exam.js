@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {EXAM_STATUS} from '../../../constants';
+import {convertDate} from '../../../utils/converDate';
 
 function Exam(props) {
   const {subject, exam, onPress} = props;
@@ -29,15 +30,17 @@ function Exam(props) {
       </View>
       <View>
         {exam.status === EXAM_STATUS.READY ? (
-          <Text style={styles.text}>Ngày tạo: {exam.date}</Text>
+          <Text style={styles.text}>
+            Ngày tạo: {convertDate(exam.created_at)}
+          </Text>
         ) : (
-          <Text style={styles.text}>Ngày thi: {exam.date}</Text>
+          <Text style={styles.text}>Ngày thi: {convertDate(exam.endtime)}</Text>
         )}
       </View>
-      {exam.score && (
+      {exam.status === EXAM_STATUS.READY || (
         <View>
           <Text style={styles.text}>
-            Điểm: {exam.score}/{subject.score_pass}
+            Điểm: {exam.result}/{subject.score_pass}
           </Text>
         </View>
       )}
