@@ -6,7 +6,7 @@ function Subject(props) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.title}>{subject.name}</Text>
-      <Text style={styles.text}>Số câu hỏi: {subject.name}</Text>
+      <Text style={styles.text}>Số câu hỏi: {subject.question_number}</Text>
       <Text style={styles.text}>Thời gian: {subject.duration} phút</Text>
       <Text style={styles.text}>Điểm đạt: {subject.score_pass}</Text>
     </TouchableOpacity>

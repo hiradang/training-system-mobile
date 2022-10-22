@@ -3,14 +3,14 @@ import {Text, View, StyleSheet} from 'react-native';
 import {RadioButton} from 'react-native-paper';
 
 function RadioQuestion(props) {
-  const {answers} = props;
+  const {answers, chosenAnswer} = props;
   return (
     <View style={styles.container}>
       {answers.map((answer, index) => (
         <View key={index} style={styles.wrapper}>
           <RadioButton
             disabled={true}
-            status={answer.selected ? 'checked' : 'unchecked'}
+            status={answer.id === chosenAnswer ? 'checked' : 'unchecked'}
           />
           <Text style={styles.answerContent}>{answer.content}</Text>
         </View>

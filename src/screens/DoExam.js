@@ -1,25 +1,91 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
-import {questionApi} from '../services/api';
-import Question from '../components/screens/ExamHistory/Question';
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {questionApi, examApi} from '../services/api';
+import DoingQuestion from '../components/screens/DoExam/DoingQuestion';
+import moment from 'moment';
+import CountDown from 'react-native-countdown-component';
+import ConfirmModal from '../components/common/ConfirmModal';
+import {useSelector} from 'react-redux';
 
-function DoExam({route}) {
+function DoExam({route, navigation}) {
   const {examId} = route.params;
   const [questions, setQuestions] = useState([]);
+  const [isShow, setShowModal] = useState(false);
+  const [remainingTimeInSeconds, setRemainingTimeInSeconds] = useState(null);
+  const {examData} = useSelector(state => state.taskReducer);
 
   useEffect(() => {
     questionApi.getQuestions(examId).then(res => {
       setQuestions(res.data.list_question);
+
+      var currentTime = moment(Date.now());
+      var endTime = moment(new Date(res.data.endtime));
+      var diff = endTime.diff(currentTime, 'seconds');
+      if (diff > 0) {
+        setRemainingTimeInSeconds(diff);
+      }
     });
   }, []);
 
+  const openConfirmSubmitModal = () => {
+    setShowModal(true);
+  };
+
+  const handleSubmit = () => {
+    examApi.submitExam(examId, {question: examData}).then(res => {
+      navigation.goBack();
+    });
+  };
+
+  const cancelSubmit = () => {
+    setShowModal(false);
+  };
+
   return (
-    <ScrollView style={styles.body}>
-      {questions &&
-        questions.map((question, index) => (
-          <Question key={index} question={question} index={index} />
-        ))}
-    </ScrollView>
+    <View style={styles.body}>
+      {isShow && (
+        <ConfirmModal
+          showModal={isShow}
+          negativeFunc={cancelSubmit}
+          cancelFunc={cancelSubmit}
+          positiveFunc={handleSubmit}
+          header="Nộp bài"
+          message="Bạn có chắc chắn muốn kết thúc bài thi?"
+          negativeMessage="Tiếp tục"
+          positiveMessage="Nộp bài"
+        />
+      )}
+      {remainingTimeInSeconds && (
+        <View style={styles.countDown}>
+          <View>
+            <CountDown
+              until={remainingTimeInSeconds}
+              timeToShow={
+                remainingTimeInSeconds > 3600 ? ['H', 'M', 'S'] : ['M', 'S']
+              }
+              timeLabels
+              showSeparator={true}
+              onFinish={handleSubmit}
+            />
+          </View>
+          <TouchableOpacity onPress={openConfirmSubmitModal}>
+            <Text style={styles.submitTitle}>Nộp bài</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <ScrollView>
+        {questions &&
+          questions.map((question, index) => (
+            <DoingQuestion key={index} question={question} index={index} />
+          ))}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -27,6 +93,27 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: '#5F7FEF',
     flex: 1,
+  },
+  countDown: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 20,
+    marginHorizontal: 20,
+  },
+  submitTitle: {
+    backgroundColor: '#34eb4f',
+    color: '#333',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  countDownText: {
+    backgroundColor: 'green',
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
   },
 });
 export default DoExam;

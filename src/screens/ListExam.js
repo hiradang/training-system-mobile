@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {examApi} from '../services/api';
 import {EXAM_STATUS} from '../constants';
+import {useFocusEffect} from '@react-navigation/native';
 
 import CustomButton from '../components/common/CustomButton';
 import SubjectInfo from '../components/screens/ListExam/SubjectInfo';
@@ -19,6 +20,11 @@ function ListExam({route, navigation}) {
         exam: exam,
         title: subject.name,
       });
+    } else if (exam.status === EXAM_STATUS.DOING) {
+      navigation.navigate('DoExam', {
+        title: subject.name,
+        examId: exam.id,
+      });
     } else if (
       exam.status === EXAM_STATUS.FAILED ||
       exam.status === EXAM_STATUS.PASS
@@ -30,17 +36,19 @@ function ListExam({route, navigation}) {
     }
   };
 
-  useEffect(() => {
-    examApi.getListExams(subject.id, userId).then(res => {
-      setExams(res.data);
-    });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setExams([]);
+      examApi.getListExams(subject.id, userId).then(res => {
+        setExams(res.data);
+      });
+    }, []),
+  );
 
   const creatNewExam = () => {
     examApi.createExam(subject.id, userId).then(res => {
-      const newExam = {...res.data, status: 'ready'};
-      const newExams = [newExam, ...exams];
-      setExams(newExams);
+      let newExam = {...res.data, status: 'ready'};
+      setExams(preExams => [newExam, ...preExams]);
       Toast.show({
         type: 'successToast',
         text1: 'Tạo bài thi mới thành công',
