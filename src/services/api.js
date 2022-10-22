@@ -1,7 +1,7 @@
 import olAxios from './index';
 
 export const subjectApi = {
-  getSubjects: () => olAxios.get('/api/subjects'),
+  getSubjects: params => olAxios.get('/api/subjects/', params),
 };
 export const profileApi = {
   getInfoProfile: (id) => olAxios.get(`/api/users/${id}/edit`),

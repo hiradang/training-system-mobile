@@ -7,12 +7,13 @@ import Subject from '../components/screens/Home/Subject';
 
 function Home({navigation}) {
   const [subjects, setSubjects] = useState([]);
-  const [search, setSearch] = useState([]);
+  const [search, setSearch] = useState('');
   useEffect(() => {
-    subjectApi.getSubjects().then(res => {
+    subjectApi.getSubjects({'q%5Bname%5D': search}).then(res => {
+      console.log('running');
       setSubjects(res.data);
     });
-  }, []);
+  }, [search]);
 
   return (
     <ScrollView style={styles.body}>
