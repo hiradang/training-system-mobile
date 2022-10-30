@@ -28,7 +28,7 @@ function Home({navigation}) {
         placeholderTextColor="#000"
       />
 
-      {subjects && (
+      {subjects.length > 0 && (
         <View style={styles.subjectContainer}>
           {subjects.map((subject, index) => (
             <Subject

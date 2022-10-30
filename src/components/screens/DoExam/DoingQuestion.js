@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
-import CheckboxQuestion from './CheckboxQuestion';
-import RadioQuestion from './RadioQuestion';
-import {QUESTION_TYPE, QUESTION_STATUS} from '../../../constants';
+import DoingCheckboxQuestion from './DoingCheckboxQuestion';
+import DoingRadioQuestion from './DoingRadioQuestion';
+import {QUESTION_TYPE} from '../../../constants';
 
-function Question(props) {
+function DoingQuestion(props) {
   const {question, index} = props;
   return (
     <View style={styles.container}>
@@ -21,28 +21,15 @@ function Question(props) {
           />
         )}
         {question.question_type === QUESTION_TYPE.CHECKBOX ? (
-          <CheckboxQuestion
+          <DoingCheckboxQuestion
             answers={question.list_ans}
-            chosenAnswers={question.choosed ?? []}
+            questionId={question.id}
           />
         ) : (
-          <RadioQuestion
+          <DoingRadioQuestion
             answers={question.list_ans}
-            chosenAnswer={question.choosed ? question.choosed[0] : null}
+            questionId={question.id}
           />
-        )}
-        {question.result === QUESTION_STATUS.CORRECT ? (
-          <View>
-            <Text style={[styles.answer, styles.correctAnswer]}>
-              Câu trả lời đúng
-            </Text>
-          </View>
-        ) : (
-          <View>
-            <Text style={[styles.answer, styles.falseAnswer]}>
-              Câu trả lời sai
-            </Text>
-          </View>
         )}
       </View>
     </View>
@@ -79,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Question;
+export default DoingQuestion;

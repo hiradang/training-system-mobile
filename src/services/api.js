@@ -9,6 +9,8 @@ export const examApi = {
     olAxios.get(`/api/subjects/${subjecId}/users/${userId}/exams`),
   createExam: (subjecId, userId) =>
     olAxios.post(`/api/subjects/${subjecId}/users/${userId}/exams`),
+  submitExam: (id, examData) =>
+    olAxios.patch(`/api/exams/${id}`, {exam: examData}),
 };
 export const questionApi = {
   getQuestions: examId => olAxios.get(`/api/exams/${examId}`),

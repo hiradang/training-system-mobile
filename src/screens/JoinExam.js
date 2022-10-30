@@ -17,7 +17,7 @@ function JoinExam({route, navigation}) {
           text="Bắt đầu"
           textStyles={{color: 'white'}}
           onPressFunc={() =>
-            navigation.navigate('DoExam', {
+            navigation.replace('DoExam', {
               title: subject.name,
               examId: exam.id,
             })

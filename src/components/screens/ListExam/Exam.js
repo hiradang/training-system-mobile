@@ -18,6 +18,9 @@ function Exam(props) {
     } else if (exam.status === EXAM_STATUS.READY) {
       setExamStatus('Sẵn sàng');
       setExamStatusClass('ready');
+    } else if (exam.status === EXAM_STATUS.DOING) {
+      setExamStatus('Đang làm');
+      setExamStatusClass('doing');
     } else setExamStatus('');
   }, []);
   return (
@@ -37,10 +40,10 @@ function Exam(props) {
           <Text style={styles.text}>Ngày thi: {convertDate(exam.endtime)}</Text>
         )}
       </View>
-      {exam.status === EXAM_STATUS.READY || (
+      {exam.status !== EXAM_STATUS.READY && exam.status !== EXAM_STATUS.DOING && (
         <View>
           <Text style={styles.text}>
-            Điểm: {exam.result}/{subject.score_pass}
+            Điểm: {exam.result}/{subject.question_number}
           </Text>
         </View>
       )}
@@ -85,6 +88,9 @@ const styles = StyleSheet.create({
   },
   ready: {
     backgroundColor: '#7CDDF2',
+  },
+  doing: {
+    backgroundColor: '#EFF184',
   },
 });
 

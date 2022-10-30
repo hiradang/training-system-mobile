@@ -11,7 +11,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import Input from '../../components/common/Input';
 import CustomButton from '../../components/common/CustomButton';
-import { AuthApi } from '../../services/api';
+import {AuthApi} from '../../services/api';
 
 function SignUp({navigation}) {
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ function SignUp({navigation}) {
   const [errorPass, setErrorPass] = useState('');
   const [errorCheckPass, setErrorCheckPass] = useState('');
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     if (!value) {
       setErrorEmail('Trường này không được bỏ trống');
     } else if (value.length < 10) {
@@ -35,7 +35,7 @@ function SignUp({navigation}) {
       const check = value
         .toLowerCase()
         .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         );
       if (check) {
         setErrorEmail('');
@@ -92,25 +92,23 @@ function SignUp({navigation}) {
     const valid3 = validatePass(password);
     const valid4 = validateCheckPass(checkPass);
     if (valid1 && valid2 && valid3 && valid4) {
-      AuthApi.signup(name, email, password)
-        .then(res => {
-          console.log(res.data);
-          if (res.data.email) {
-            Toast.show({
-              type: 'errorToast',
-              text1: 'Email đã tồn tại',
-              visibilityTime: 2000,
-            });
-            setErrorEmail('Email đã tồn tại');
-          } else {
-            Toast.show({
-              type: 'successToast',
-              text1: 'Đăng ký thành công',
-              visibilityTime: 2000,
-            });
-            navigation.replace('Login');
-          }
-        });
+      AuthApi.signup(name, email, password).then(res => {
+        if (res.data.email) {
+          Toast.show({
+            type: 'errorToast',
+            text1: 'Email đã tồn tại',
+            visibilityTime: 2000,
+          });
+          setErrorEmail('Email đã tồn tại');
+        } else {
+          Toast.show({
+            type: 'successToast',
+            text1: 'Đăng ký thành công',
+            visibilityTime: 2000,
+          });
+          navigation.replace('Login');
+        }
+      });
     }
   };
   return (

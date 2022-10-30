@@ -3,14 +3,14 @@ import {Text, View, StyleSheet} from 'react-native';
 import {Checkbox} from 'react-native-paper';
 
 function CheckboxQuestion(props) {
-  const {answers} = props;
+  const {answers, chosenAnswers} = props;
   return (
     <View style={styles.container}>
       {answers.map((answer, index) => (
         <View key={index} style={styles.wrapper}>
           <Checkbox
             disabled={true}
-            status={answer.selected ? 'checked' : 'unchecked'}
+            status={chosenAnswers.includes(answer.id) ? 'checked' : 'unchecked'}
           />
           <Text style={styles.answerContent}>{answer.content}</Text>
         </View>

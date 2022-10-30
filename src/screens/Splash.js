@@ -11,7 +11,6 @@ function Splash({navigation}) {
     setTimeout(() => {
       AsyncStorage.getItem('user').then(user => {
         const userObject = JSON.parse(user);
-        // console.log(userObject);
         if (!userObject) navigation.replace('Start');
         else {
           dispatch(setUserId(userObject.user_id));
