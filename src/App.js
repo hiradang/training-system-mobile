@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-toast-message';
+import {useTranslation} from 'react-i18next';
 
 import Splash from './screens/Splash';
 import Start from './screens/Start';
@@ -121,6 +122,8 @@ const App = () => {
     });
   }, []);
 
+  const {t} = useTranslation();
+
   return (
     <Provider store={Store}>
       <NavigationContainer>
@@ -158,13 +161,16 @@ const App = () => {
             component={Home}
             options={({navigation}) => ({
               headerShown: true,
+              title: t('App Title'),
               headerRight: () => (
                 <AntDesign
                   name="setting"
                   size={30}
                   style={{marginRight: 20}}
                   color="black"
-                  onPress={() => navigation.navigate('Setting')}
+                  onPress={() => {
+                    navigation.navigate('Setting');
+                  }}
                 />
               ),
             })}
@@ -186,7 +192,7 @@ const App = () => {
             component={Setting}
             options={{
               headerShown: true,
-              title: 'Cài đặt',
+              title: t('Setting'),
             }}
           />
           <Stack.Screen
@@ -216,7 +222,7 @@ const App = () => {
             component={EditProfile}
             options={{
               headerShown: true,
-              title: 'Chỉnh sửa tài khoản',
+              title: t('Edit Profile'),
             }}
           />
           <Stack.Screen

@@ -15,3 +15,9 @@ export const QUESTION_STATUS = {
   WRONG: 'wrong',
   CORRECT: 'correct',
 };
+
+export const LANGUAGE_CODE = {
+  Vietnamese: 'vi',
+  Japanese: 'jp',
+  English: 'en',
+};

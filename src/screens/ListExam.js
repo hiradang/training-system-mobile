@@ -3,6 +3,7 @@ import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {examApi} from '../services/api';
 import {EXAM_STATUS} from '../constants';
 import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import CustomButton from '../components/common/CustomButton';
 import SubjectInfo from '../components/screens/ListExam/SubjectInfo';
@@ -12,6 +13,7 @@ import Toast from 'react-native-toast-message';
 function ListExam({route, navigation}) {
   const {subject, userId} = route.params;
   const [exams, setExams] = useState([]);
+  const {t} = useTranslation();
 
   const examOnPress = exam => {
     if (exam.status === EXAM_STATUS.READY) {
@@ -51,7 +53,7 @@ function ListExam({route, navigation}) {
       setExams(preExams => [newExam, ...preExams]);
       Toast.show({
         type: 'successToast',
-        text1: 'Tạo bài thi mới thành công',
+        text1: t('Create new exam successfully'),
         visibilityTime: 2000,
       });
     });
@@ -62,7 +64,7 @@ function ListExam({route, navigation}) {
       <SubjectInfo subject={subject} />
       <View style={styles.button}>
         <CustomButton
-          text="Luyện tập"
+          text={t('Practice')}
           onPressFunc={creatNewExam}
           textStyles={{color: 'white'}}
           buttonStyles={{
@@ -86,7 +88,9 @@ function ListExam({route, navigation}) {
         ))
       ) : (
         <View>
-          <Text style={styles.noExamText}>Bạn chưa làm bài thi nào.</Text>
+          <Text style={styles.noExamText}>
+            {t('You haven not done any exam yet.')}
+          </Text>
         </View>
       )}
     </ScrollView>

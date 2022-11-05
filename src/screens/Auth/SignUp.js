@@ -12,6 +12,7 @@ import Toast from 'react-native-toast-message';
 import Input from '../../components/common/Input';
 import CustomButton from '../../components/common/CustomButton';
 import {AuthApi} from '../../services/api';
+import {useTranslation} from 'react-i18next';
 
 function SignUp({navigation}) {
   const [email, setEmail] = useState('');
@@ -23,14 +24,15 @@ function SignUp({navigation}) {
   const [errorName, setErrorName] = useState('');
   const [errorPass, setErrorPass] = useState('');
   const [errorCheckPass, setErrorCheckPass] = useState('');
+  const {t} = useTranslation();
 
   const validateEmail = value => {
     if (!value) {
-      setErrorEmail('Trường này không được bỏ trống');
+      setErrorEmail(t('This field cannot be empty'));
     } else if (value.length < 10) {
-      setErrorEmail('Email quá ngắn');
+      setErrorEmail(t('Email is too short'));
     } else if (value.length > 30) {
-      setErrorEmail('Email quá dài');
+      setErrorEmail(t('Email is too long'));
     } else {
       const check = value
         .toLowerCase()
@@ -40,18 +42,18 @@ function SignUp({navigation}) {
       if (check) {
         setErrorEmail('');
         return true;
-      } else setErrorEmail('Email không hợp lệ');
+      } else setErrorEmail(t('Email is invalid'));
     }
 
     return false;
   };
   const validateName = value => {
     if (!value) {
-      setErrorName('Trường này không được bỏ trống');
+      setErrorName(t('This field cannot be empty'));
     } else if (value.length < 10) {
-      setErrorName('Tên người dùng quá ngắn');
+      setErrorName(t('Username is too short'));
     } else if (value.length > 30) {
-      setErrorName('Tên người dùng quá dài');
+      setErrorName(t('Username is too long'));
     } else {
       setErrorName('');
       return true;
@@ -61,11 +63,11 @@ function SignUp({navigation}) {
 
   const validatePass = value => {
     if (!value) {
-      setErrorPass('Trường này không được bỏ trống');
+      setErrorPass(t('This field cannot be empty'));
     } else if (value.length < 6) {
-      setErrorPass('Mật khẩu quá ngắn(tối thiểu 6 kí tự)');
+      setErrorPass(t('Password is too short (at least 6 characters)'));
     } else if (value.length > 20) {
-      setErrorPass('Mật khẩu quá dài');
+      setErrorPass(t('Password is too long'));
     } else {
       setErrorPass('');
       return true;
@@ -75,9 +77,9 @@ function SignUp({navigation}) {
 
   const validateCheckPass = value => {
     if (!value) {
-      setErrorCheckPass('Trường này không được bỏ trống');
+      setErrorCheckPass(t('This field cannot be empty'));
     } else if (password !== value) {
-      setErrorCheckPass('Mật khẩu xác nhận không trùng khớp');
+      setErrorCheckPass(t('The confirm password does not match'));
     } else {
       setErrorCheckPass('');
       return true;
@@ -96,14 +98,14 @@ function SignUp({navigation}) {
         if (res.data.email) {
           Toast.show({
             type: 'errorToast',
-            text1: 'Email đã tồn tại',
+            text1: t('Email already exists'),
             visibilityTime: 2000,
           });
-          setErrorEmail('Email đã tồn tại');
+          setErrorEmail(t('Email already exists'));
         } else {
           Toast.show({
             type: 'successToast',
-            text1: 'Đăng ký thành công',
+            text1: t('Signup Successfully'),
             visibilityTime: 2000,
           });
           navigation.replace('Login');
@@ -121,10 +123,10 @@ function SignUp({navigation}) {
           }}>
           <Ionicons name="chevron-back" size={25} color="#ffffff" />
         </TouchableOpacity>
-        <Text style={styles.text}>Đăng ký </Text>
+        <Text style={styles.text}>{t('Sign Up')}</Text>
         <Input
-          title="Email"
-          placeholder="Email"
+          title={t('Email')}
+          placeholder={t('Email')}
           value={email}
           textError={errorEmail}
           error={errorEmail !== ''}
@@ -135,8 +137,8 @@ function SignUp({navigation}) {
           }}
         />
         <Input
-          title="Tên người dùng"
-          placeholder="Tên người dùng"
+          title={t('Username')}
+          placeholder={t('Username')}
           value={name}
           icon="user"
           textError={errorName}
@@ -147,9 +149,9 @@ function SignUp({navigation}) {
           }}
         />
         <Input
-          title="Mật khẩu"
-          placeholder="Mật khẩu"
-          titleInfo="(tối thiểu 6 kí tự)"
+          title={t('Password')}
+          placeholder={t('Password')}
+          titleInfo={t('At least 6 characters')}
           value={password}
           textError={errorPass}
           error={errorPass !== ''}
@@ -161,8 +163,8 @@ function SignUp({navigation}) {
           }}
         />
         <Input
-          title="Xác nhận mật khẩu"
-          placeholder="Mật khẩu"
+          title={t('Confirm Password')}
+          placeholder={t('Confirm Password')}
           value={checkPass}
           secureTextEntry
           textError={errorCheckPass}
@@ -182,7 +184,7 @@ function SignUp({navigation}) {
               marginTop: 20,
             }}
             textStyles={{color: 'white'}}
-            text={'Đăng ký'}
+            text={t('Sign Up')}
             onPressFunc={submit}
           />
         </View>

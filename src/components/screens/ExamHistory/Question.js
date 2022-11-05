@@ -3,14 +3,16 @@ import {Text, View, StyleSheet, Image} from 'react-native';
 import CheckboxQuestion from './CheckboxQuestion';
 import RadioQuestion from './RadioQuestion';
 import {QUESTION_TYPE, QUESTION_STATUS} from '../../../constants';
+import {useTranslation} from 'react-i18next';
 
 function Question(props) {
   const {question, index} = props;
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.questionContent}>
-          Câu hỏi {index + 1}: {question.question_content}
+          {t('Question')} {index + 1}: {question.question_content}
         </Text>
         {question.image && (
           <Image
@@ -34,13 +36,13 @@ function Question(props) {
         {question.result === QUESTION_STATUS.CORRECT ? (
           <View>
             <Text style={[styles.answer, styles.correctAnswer]}>
-              Câu trả lời đúng
+              {t('Your answer is correct')}
             </Text>
           </View>
         ) : (
           <View>
             <Text style={[styles.answer, styles.falseAnswer]}>
-              Câu trả lời sai
+              {t('Your answer is incorrect')}
             </Text>
           </View>
         )}

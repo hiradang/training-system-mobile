@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, ScrollView} from 'react-native';
 import Input from '../components/common/Input';
 import Toast from 'react-native-toast-message';
 import CustomButton from '../components/common/CustomButton';
-import { profileApi } from '../services/api';
+import {profileApi} from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useTranslation} from 'react-i18next';
 
-function EditProfile({ navigation }) {
-
+function EditProfile({navigation}) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
@@ -20,35 +20,36 @@ function EditProfile({ navigation }) {
   const [errorCheckPass, setErrorCheckPass] = useState('');
   const [errorPassCurrent, setErrorPassCurrent] = useState('');
   const [idUser, setIdUser] = useState('');
+  const {t} = useTranslation();
 
-  const validateEmail = (value) => {
+  const validateEmail = value => {
     if (!value) {
-      setErrorEmail('Trường này không được bỏ trống');
+      setErrorEmail(t('This field cannot be empty'));
     } else if (value.length < 10) {
-      setErrorEmail('Email quá ngắn');
+      setErrorEmail(t('Email is too short'));
     } else if (value.length > 30) {
-      setErrorEmail('Email quá dài');
+      setErrorEmail(t('Email is too long'));
     } else {
       const check = value
         .toLowerCase()
         .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         );
       if (check) {
         setErrorEmail('');
         return true;
-      } else setErrorEmail('Email không hợp lệ');
+      } else setErrorEmail(t('Email is invalid'));
     }
 
     return false;
   };
   const validateName = value => {
     if (!value) {
-      setErrorName('Trường này không được bỏ trống');
+      setErrorName(t('This field cannot be empty'));
     } else if (value.length < 10) {
-      setErrorName('Tên người dùng quá ngắn');
+      setErrorName(t('Username is too short'));
     } else if (value.length > 30) {
-      setErrorName('Tên người dùng quá dài');
+      setErrorName(t('Username is too long'));
     } else {
       setErrorName('');
       return true;
@@ -58,9 +59,9 @@ function EditProfile({ navigation }) {
 
   const validatePass = value => {
     if (value.length < 6 && value.length > 0) {
-      setErrorPass('Mật khẩu quá ngắn(tối thiểu 6 kí tự)');
+      setErrorPass(t('Password is too short (at least 6 characters)'));
     } else if (value.length > 20) {
-      setErrorPass('Mật khẩu quá dài');
+      setErrorPass(t('Password is too long'));
     } else {
       setErrorPass('');
       return true;
@@ -70,7 +71,7 @@ function EditProfile({ navigation }) {
 
   const validateCheckPass = value => {
     if (password !== value) {
-      setErrorCheckPass('Mật khẩu xác nhận không trùng khớp');
+      setErrorCheckPass(t('The confirm password does not match'));
     } else {
       setErrorCheckPass('');
       return true;
@@ -79,11 +80,11 @@ function EditProfile({ navigation }) {
   };
   const validatePassCurrent = value => {
     if (!value) {
-      setErrorPassCurrent('Bạn cần nhập mật khẩu để thay đổi');
+      setErrorPassCurrent(t('You should type your current password to reset'));
     } else if (value.length < 6) {
-      setErrorPassCurrent('Mật khẩu quá ngắn(tối thiểu 6 kí tự)');
+      setErrorPassCurrent(t('Password is too short (at least 6 characters)'));
     } else if (value.length > 20) {
-      setErrorPassCurrent('Mật khẩu quá dài');
+      setErrorPassCurrent(t('Password is too long'));
     } else {
       setErrorPassCurrent('');
       return true;
@@ -94,15 +95,14 @@ function EditProfile({ navigation }) {
     AsyncStorage.getItem('user').then(user => {
       if (JSON.parse(user)) {
         let idUser1 = JSON.parse(user).user_id;
-        profileApi.getInfoProfile(idUser1).then((res) => {
+        profileApi.getInfoProfile(idUser1).then(res => {
           setEmail(res.data.email);
           setName(res.data.name);
-          setIdUser(idUser1)
-        })
+          setIdUser(idUser1);
+        });
       }
-    })
-
-  }, [])
+    });
+  }, []);
   const submit = () => {
     setOnSubmit(true);
     const valid1 = validateEmail(email);
@@ -112,41 +112,49 @@ function EditProfile({ navigation }) {
     const valid5 = validatePassCurrent(passCurrent);
     if (valid1 && valid2 && valid3 && valid4 && valid5) {
       if (password === '') {
-        profileApi.patchInfoProfile(idUser, { email, name, cr_password: passCurrent }).then(res => {
-          resultUpdate(res.data)
-        })
+        profileApi
+          .patchInfoProfile(idUser, {email, name, cr_password: passCurrent})
+          .then(res => {
+            resultUpdate(res.data);
+          });
       } else {
-        profileApi.patchInfoProfile(idUser, { email, name, password, cr_password: passCurrent }).then(res => {
-          resultUpdate(res.data)
-        })
+        profileApi
+          .patchInfoProfile(idUser, {
+            email,
+            name,
+            password,
+            cr_password: passCurrent,
+          })
+          .then(res => {
+            resultUpdate(res.data);
+          });
       }
     }
   };
 
-  const resultUpdate = (data) => {
+  const resultUpdate = data => {
     if (data.success) {
       Toast.show({
         type: 'successToast',
-        text1: 'Chỉnh sửa thành công',
+        text1: t('Update successfully'),
         visibilityTime: 2000,
       });
-      navigation.goBack()
+      navigation.goBack();
     } else {
       if (data.notice) {
-        setErrorEmail("Email đã tồn tại")
-      } else setErrorPassCurrent("Mật khẩu không chính xác")
+        setErrorEmail(t('This email is incorrect'));
+      } else setErrorPassCurrent(t('This password is incorrect'));
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView>
-
         <Input
-          title="Email"
-          placeholder="Email"
+          title={t('Email')}
+          placeholder={t('Email')}
           value={email}
-          style={{ marginTop: 20 }}
+          style={{marginTop: 20}}
           textError={errorEmail}
           error={errorEmail !== ''}
           icon="user"
@@ -156,11 +164,11 @@ function EditProfile({ navigation }) {
           }}
         />
         <Input
-          title="Tên người dùng"
-          placeholder="Tên người dùng"
+          title={t('Username')}
+          placeholder={t('Username')}
           value={name}
           icon="user"
-          style={{ marginTop: -5 }}
+          style={{marginTop: -5}}
           textError={errorName}
           error={errorName !== ''}
           onChangeText={value => {
@@ -169,12 +177,12 @@ function EditProfile({ navigation }) {
           }}
         />
         <Input
-          title="Mật khẩu"
-          placeholder="Mật khẩu"
+          title={t('New Password')}
+          placeholder={t('New Password')}
           value={password}
           textError={errorPass}
           error={errorPass !== ''}
-          style={{ marginTop: -5 }}
+          style={{marginTop: -5}}
           secureTextEntry
           icon="lock"
           onChangeText={value => {
@@ -183,11 +191,11 @@ function EditProfile({ navigation }) {
           }}
         />
         <Input
-          title="Xác nhận mật khẩu mới"
-          placeholder="Mật khẩu"
+          title={t('Confirm New Password')}
+          placeholder={t('Confirm New Password')}
           value={checkPass}
           secureTextEntry
-          style={{ marginTop: -5 }}
+          style={{marginTop: -5}}
           textError={errorCheckPass}
           error={errorCheckPass !== ''}
           icon="lock"
@@ -197,8 +205,8 @@ function EditProfile({ navigation }) {
           }}
         />
         <Input
-          title="Mật khẩu hiện tại"
-          placeholder="Mật khẩu"
+          title={t('Current Password')}
+          placeholder={t('Current Password')}
           value={passCurrent}
           secureTextEntry
           textError={errorPassCurrent}
@@ -217,8 +225,8 @@ function EditProfile({ navigation }) {
               height: 60,
               marginTop: 10,
             }}
-            textStyles={{ color: 'white' }}
-            text={'Lưu thay đổi'}
+            textStyles={{color: 'white'}}
+            text={t('Save Changes')}
             onPressFunc={submit}
           />
         </View>

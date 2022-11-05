@@ -4,11 +4,13 @@ import Input from '../components/common/Input';
 import {subjectApi} from '../services/api';
 import Subject from '../components/screens/Home/Subject';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 function Home({navigation}) {
   const [subjects, setSubjects] = useState([]);
   const [search, setSearch] = useState('');
   const {userId} = useSelector(state => state.taskReducer);
+  const {t} = useTranslation();
   useEffect(() => {
     subjectApi.getSubjects({name: search}).then(res => {
       setSubjects(res.data);
@@ -17,14 +19,14 @@ function Home({navigation}) {
 
   return (
     <ScrollView style={styles.body}>
-      <Text style={styles.title}>Các khóa học trong hệ thống</Text>
+      <Text style={styles.title}>{t('Subjects in the system')}</Text>
 
       <Input
         style={styles.inputSearch}
         value={search}
         icon="search"
         onChangeText={setSearch}
-        placeholder="Tìm kiếm"
+        placeholder={t('Search')}
         placeholderTextColor="#000"
       />
 
