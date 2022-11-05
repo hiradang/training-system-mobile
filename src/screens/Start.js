@@ -1,20 +1,47 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import CustomButton from '../components/common/CustomButton';
+import {useTranslation} from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LanguageModal from '../components/common/LanguageModal';
+import {changeLanguageUtils} from '../utils/changeLanguage';
+import {LANGUAGE_CODE} from '../constants';
 
 function Start({navigation}) {
+  const {t} = useTranslation();
+  const [isShow, setShow] = useState(false);
+  const [language, setLanguage] = useState('Vietnamese');
+  const handleOnPress = newLanguage => {
+    setLanguage(newLanguage);
+    changeLanguageUtils(LANGUAGE_CODE[newLanguage]);
+    AsyncStorage.setItem(
+      'language',
+      JSON.stringify({
+        language: newLanguage,
+      }),
+    );
+  };
+
   return (
     <View style={styles.body}>
       <View style={styles.main}>
+        {isShow && (
+          <LanguageModal
+            showModal={isShow}
+            cancelFunc={() => setShow(false)}
+            language={language}
+            onPress={handleOnPress}
+          />
+        )}
+        <TouchableOpacity style={styles.language} onPress={() => setShow(true)}>
+          <Text>{t('Start Language')}</Text>
+        </TouchableOpacity>
         <Image
           style={styles.image}
           source={require('../../assets/img/training-icon.png')}></Image>
       </View>
       <View style={styles.button}>
-        <Text style={styles.text}>
-          Chào mừng đến với Training System. Hy vọng bạn sẽ học thêm được nhiều
-          kiến thức bổ ích!
-        </Text>
+        <Text style={styles.text}>{t('Welcome To App')}</Text>
         <CustomButton
           buttonStyles={{
             backgroundColor: '#000000',
@@ -23,7 +50,7 @@ function Start({navigation}) {
             marginTop: 20,
           }}
           textStyles={{color: 'white'}}
-          text={'Đăng ký'}
+          text={t('Sign Up')}
           onPressFunc={() => navigation.navigate('Signup')}
         />
         <CustomButton
@@ -34,7 +61,7 @@ function Start({navigation}) {
             marginTop: 20,
           }}
           textStyles={{color: 'white'}}
-          text={'Đăng nhập'}
+          text={t('Log In')}
           onPressFunc={() => navigation.navigate('Login')}
         />
       </View>
@@ -55,6 +82,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#3D67FF',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  languageModal: {
+    position: 'absolute',
+    top: '50%',
+  },
+  language: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderColor: 'white',
   },
   image: {
     width: 150,

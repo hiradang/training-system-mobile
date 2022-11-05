@@ -2,24 +2,26 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {EXAM_STATUS} from '../../../constants';
 import {convertDate} from '../../../utils/converDate';
+import {useTranslation} from 'react-i18next';
 
 function Exam(props) {
   const {subject, exam, onPress} = props;
   const [examStatus, setExamStatus] = useState();
   const [examStatusClass, setExamStatusClass] = useState();
+  const {t} = useTranslation();
 
   useEffect(() => {
     if (exam.status === EXAM_STATUS.PASS) {
-      setExamStatus('Đạt');
+      setExamStatus(t('Passed'));
       setExamStatusClass('passed');
     } else if (exam.status === EXAM_STATUS.FAILED) {
-      setExamStatus('Không Đạt');
+      setExamStatus(t('Failed'));
       setExamStatusClass('failed');
     } else if (exam.status === EXAM_STATUS.READY) {
-      setExamStatus('Sẵn sàng');
+      setExamStatus(t('Ready'));
       setExamStatusClass('ready');
     } else if (exam.status === EXAM_STATUS.DOING) {
-      setExamStatus('Đang làm');
+      setExamStatus(t('Doing'));
       setExamStatusClass('doing');
     } else setExamStatus('');
   }, []);
@@ -34,16 +36,18 @@ function Exam(props) {
       <View>
         {exam.status === EXAM_STATUS.READY ? (
           <Text style={styles.text}>
-            Ngày tạo: {convertDate(exam.created_at)}
+            {t('Created at')}: {convertDate(exam.created_at)}
           </Text>
         ) : (
-          <Text style={styles.text}>Ngày thi: {convertDate(exam.endtime)}</Text>
+          <Text style={styles.text}>
+            {t('Exam Date')}: {convertDate(exam.endtime)}
+          </Text>
         )}
       </View>
       {exam.status !== EXAM_STATUS.READY && exam.status !== EXAM_STATUS.DOING && (
         <View>
           <Text style={styles.text}>
-            Điểm: {exam.result}/{subject.question_number}
+            {t('Score')}: {exam.result}/{subject.question_number}
           </Text>
         </View>
       )}

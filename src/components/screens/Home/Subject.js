@@ -1,14 +1,22 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 function Subject(props) {
   const {subject, onPress} = props;
+  const {t} = useTranslation();
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.title}>{subject.name}</Text>
-      <Text style={styles.text}>Số câu hỏi: {subject.question_number}</Text>
-      <Text style={styles.text}>Thời gian: {subject.duration} phút</Text>
-      <Text style={styles.text}>Điểm đạt: {subject.score_pass}</Text>
+      <Text style={styles.text}>
+        {t('Number of Questions')}: {subject.question_number}
+      </Text>
+      <Text style={styles.text}>
+        {t('Duration')}: {subject.duration} {t('Minute')}
+      </Text>
+      <Text style={styles.text}>
+        {t('Passing Score')}: {subject.score_pass}
+      </Text>
     </TouchableOpacity>
   );
 }

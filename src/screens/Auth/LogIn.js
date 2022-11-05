@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 import {Dimensions} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 import {useDispatch} from 'react-redux';
 import {setUserId} from '../../redux/actions';
@@ -25,10 +26,11 @@ function LogIn({navigation}) {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPass, setErrorPass] = useState('');
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const validateEmail = value => {
     if (!value) {
-      setErrorEmail('Trường này không được bỏ trống');
+      setErrorEmail(t('This field cannot be empty'));
     } else {
       const check = value
         .toLowerCase()
@@ -38,7 +40,7 @@ function LogIn({navigation}) {
       if (check) {
         setErrorEmail('');
         return true;
-      } else setErrorEmail('Email không hợp lệ');
+      } else setErrorEmail(t('Email is invalid'));
     }
 
     return false;
@@ -46,7 +48,7 @@ function LogIn({navigation}) {
 
   const validatePass = value => {
     if (!value) {
-      setErrorPass('Trường này không được bỏ trống');
+      setErrorPass(t('This field cannot be empty'));
     } else {
       setErrorPass('');
       return true;
@@ -70,7 +72,7 @@ function LogIn({navigation}) {
         } else {
           Toast.show({
             type: 'successToast',
-            text1: 'Đăng nhập thành công',
+            text1: t('Login Successfully'),
             visibilityTime: 2000,
           });
 
@@ -102,11 +104,11 @@ function LogIn({navigation}) {
           }}>
           <Ionicons name="chevron-back" size={25} color="white" />
         </TouchableOpacity>
-        <Text style={styles.text}>Đăng nhập</Text>
+        <Text style={styles.text}>{t('Log In')}</Text>
         <View style={styles.container}>
           <Input
-            title="Email"
-            placeholder="Email"
+            title={t('Email')}
+            placeholder={t('Email')}
             value={email}
             textError={errorEmail}
             error={errorEmail !== ''}
@@ -117,8 +119,8 @@ function LogIn({navigation}) {
             }}
           />
           <Input
-            title="Mật khẩu"
-            placeholder="Mật khẩu"
+            title={t('Password')}
+            placeholder={t('Password')}
             value={password}
             textError={errorPass}
             error={errorPass !== ''}
@@ -138,7 +140,7 @@ function LogIn({navigation}) {
                 marginTop: 20,
               }}
               textStyles={{color: 'white'}}
-              text={'Đăng nhập'}
+              text={t('Log In')}
               onPressFunc={submit}
             />
           </View>

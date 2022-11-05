@@ -1,14 +1,25 @@
-import React, { useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {RadioButton} from 'react-native-paper';
 import ConfirmationModal from '../components/common/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {changeLanguageUtils} from '../utils/changeLanguage';
+import {LANGUAGE_CODE} from '../constants';
+import {useTranslation} from 'react-i18next';
 
 function Setting({navigation}) {
-  const [language, setLanguage] = useState('Vietnamese');
+  const [language, setLanguage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const {t} = useTranslation();
+
+  useEffect(() => {
+    AsyncStorage.getItem('language').then(language => {
+      const languageObject = JSON.parse(language);
+      setLanguage(languageObject.language);
+    });
+  }, []);
 
   const logOut = () => {
     setShowModal(false);
@@ -19,6 +30,19 @@ function Setting({navigation}) {
   const cancelLogOut = () => {
     setShowModal(false);
   };
+
+  const handleChangeLanguage = value => {
+    setLanguage(value);
+    changeLanguageUtils(LANGUAGE_CODE[value]);
+    AsyncStorage.setItem(
+      'language',
+      JSON.stringify({
+        language: value,
+      }),
+    ).then(() => {
+      // navigation.replace('Training System');
+    });
+  };
   return (
     <ScrollView style={styles.body}>
       {showModal ? (
@@ -27,61 +51,73 @@ function Setting({navigation}) {
           negativeFunc={logOut}
           cancelFunc={cancelLogOut}
           positiveFunc={cancelLogOut}
-          header="Đăng xuất"
-          message="Bạn có chắc chắn muốn đăng xuất khỏi thiết bị này?"
-          negativeMessage="Đồng ý"
-          positiveMessage="Ở lại"
+          header={t('Log out')}
+          message={t('Are you sure to log out of this device?')}
+          negativeMessage={t('Yes')}
+          positiveMessage={t('Stay')}
         />
       ) : null}
       <View style={styles.itemWrapper}>
-        <Text style={styles.title}>Tài khoản</Text>
+        <Text style={styles.title}>{t('Account')}</Text>
         <View style={styles.infoWrapper}>
           <View style={styles.rowWrapper}>
-            <Text style={styles.text}>Chỉnh sửa profile</Text>
-            <FontAwesome name="pencil" color="#14D39A" size={24} 
-            onPress={() => navigation.navigate('EditProfile')}/>
+            <Text style={styles.text}>{t('Edit Profile')}</Text>
+            <FontAwesome
+              name="pencil"
+              color="#14D39A"
+              size={24}
+              onPress={() => navigation.navigate('EditProfile')}
+            />
           </View>
         </View>
       </View>
       <View style={styles.itemWrapper}>
-        <Text style={styles.title}>Ngôn ngữ</Text>
+        <Text style={styles.title}>{t('Language')}</Text>
         <View style={styles.infoWrapper}>
           <View style={[styles.rowWrapper, styles.customMarginBottom]}>
-            <Text style={styles.text}>Tiếng Việt</Text>
+            <Text style={styles.text}>{t('Vietnamese')}</Text>
             <RadioButton
               value="Vietnamese"
               status={language === 'Vietnamese' ? 'checked' : 'unchecked'}
-              onPress={() => setLanguage('Vietnamese')}
+              onPress={() => handleChangeLanguage('Vietnamese')}
             />
           </View>
-          <View style={styles.rowWrapper}>
-            <Text style={styles.text}>Tiếng Anh</Text>
+          <View style={[styles.rowWrapper, styles.customMarginBottom]}>
+            <Text style={styles.text}>{t('English')}</Text>
             <RadioButton
               value="English"
               status={language === 'English' ? 'checked' : 'unchecked'}
-              onPress={() => setLanguage('English')}
+              onPress={() => handleChangeLanguage('English')}
+            />
+          </View>
+          <View style={styles.rowWrapper}>
+            <Text style={styles.text}>{t('Japanese')}</Text>
+            <RadioButton
+              value="Japanese"
+              status={language === 'Japanese' ? 'checked' : 'unchecked'}
+              onPress={() => handleChangeLanguage('Japanese')}
             />
           </View>
         </View>
       </View>
       <View style={styles.itemWrapper}>
-        <Text style={styles.title}>Thông tin</Text>
+        <Text style={styles.title}>{t('More about us')}</Text>
         <View style={styles.infoWrapper}>
           <View style={[styles.rowWrapper, styles.customMarginBottom]}>
-            <Text style={styles.text}>Phiên bản</Text>
+            <Text style={styles.text}>{t('Version')}</Text>
             <Text style={styles.text}>2022.10.01</Text>
           </View>
           <View style={styles.rowWrapper}>
-            <Text style={styles.text}>Phát triển bởi</Text>
+            <Text style={styles.text}>{t('Developed by')}</Text>
             <Text style={styles.text}>チャカラボン</Text>
           </View>
         </View>
       </View>
       <View style={styles.itemWrapper}>
-        <Text style={styles.title}>Phiên đăng nhập</Text>
+        <Text style={styles.title}>{t('Session')}</Text>
         <View style={styles.infoWrapper}>
           <View style={[styles.rowWrapper]}>
-            <Text style={[styles.text, styles.logOutText]}>Đăng xuất</Text>
+            <Text style={[styles.text, styles.logOutText]}>{t('Log out')}</Text>
             <MaterialIcons
               size={24}
               color="#E46B6B"

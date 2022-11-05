@@ -12,6 +12,7 @@ import moment from 'moment';
 import CountDown from 'react-native-countdown-component';
 import ConfirmModal from '../components/common/ConfirmModal';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 function DoExam({route, navigation}) {
   const {examId} = route.params;
@@ -19,6 +20,7 @@ function DoExam({route, navigation}) {
   const [isShow, setShowModal] = useState(false);
   const [remainingTimeInSeconds, setRemainingTimeInSeconds] = useState(null);
   const {examData} = useSelector(state => state.taskReducer);
+  const {t} = useTranslation();
 
   useEffect(() => {
     questionApi.getQuestions(examId).then(res => {
@@ -55,10 +57,10 @@ function DoExam({route, navigation}) {
           negativeFunc={cancelSubmit}
           cancelFunc={cancelSubmit}
           positiveFunc={handleSubmit}
-          header="Nộp bài"
-          message="Bạn có chắc chắn muốn kết thúc bài thi?"
-          negativeMessage="Tiếp tục"
-          positiveMessage="Nộp bài"
+          header={t('Submit')}
+          message={t('Are you sure want to submit?')}
+          negativeMessage={t('Continue')}
+          positiveMessage={t('Submit')}
         />
       )}
       {remainingTimeInSeconds && (
@@ -75,7 +77,7 @@ function DoExam({route, navigation}) {
             />
           </View>
           <TouchableOpacity onPress={openConfirmSubmitModal}>
-            <Text style={styles.submitTitle}>Nộp bài</Text>
+            <Text style={styles.submitTitle}>{t('Submit')}</Text>
           </TouchableOpacity>
         </View>
       )}
