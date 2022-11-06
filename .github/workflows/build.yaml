@@ -80,6 +80,7 @@ jobs:
           minor_regexp_flags: ""
     
     
+    
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
