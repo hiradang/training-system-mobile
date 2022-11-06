@@ -78,6 +78,7 @@ jobs:
           minor_pattern: "(MINOR)"
           # A string which indicates the flags used by the `minor_pattern` regular expression. Supported flags: idgs
           minor_regexp_flags: ""
+          search_commit_body: true
     
     
     
