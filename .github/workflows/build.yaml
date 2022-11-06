@@ -71,6 +71,13 @@ jobs:
           tag_prefix: "v"
           format: "${major}.${minor}.${patch}"
           bump_each_commit: true
+          major_pattern: "(MAJOR)"
+          # A string which indicates the flags used by the `major_pattern` regular expression. Supported flags: idgs
+          major_regexp_flags: ""
+          # Same as above except indicating a minor change, supports regular expressions wrapped with '/'
+          minor_pattern: "(MINOR)"
+          # A string which indicates the flags used by the `minor_pattern` regular expression. Supported flags: idgs
+          minor_regexp_flags: ""
     
     
       - name: Release
