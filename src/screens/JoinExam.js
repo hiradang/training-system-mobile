@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import ExamInfo from '../components/screens/JoinExam/ExamInfo';
 import CustomButton from '../components/common/CustomButton';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-function JoinExam({route, navigation}) {
-  const {subject, exam} = route.params;
-  const {t} = useTranslation();
+function JoinExam({ route, navigation }) {
+  const { subject, exam, userId } = route.params;
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <ExamInfo subject={subject} exam={exam} />
@@ -17,11 +17,13 @@ function JoinExam({route, navigation}) {
       <View style={styles.startButton}>
         <CustomButton
           text={t('Start')}
-          textStyles={{color: 'white'}}
+          textStyles={{ color: 'white' }}
           onPressFunc={() =>
             navigation.replace('DoExam', {
               title: subject.name,
               examId: exam.id,
+              subject: subject,
+              userId: userId
             })
           }
           buttonStyles={{

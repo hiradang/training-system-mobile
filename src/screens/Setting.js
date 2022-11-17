@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {RadioButton} from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import ConfirmationModal from '../components/common/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {changeLanguageUtils} from '../utils/changeLanguage';
-import {LANGUAGE_CODE} from '../constants';
-import {useTranslation} from 'react-i18next';
+import { changeLanguageUtils } from '../utils/changeLanguage';
+import { LANGUAGE_CODE } from '../constants';
+import { useTranslation } from 'react-i18next';
 
-function Setting({navigation}) {
+function Setting({ navigation }) {
   const [language, setLanguage] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     AsyncStorage.getItem('language').then(language => {
@@ -23,7 +23,7 @@ function Setting({navigation}) {
 
   const logOut = () => {
     setShowModal(false);
-    AsyncStorage.clear();
+    AsyncStorage.removeItem("user");
     navigation.navigate('Start');
   };
 

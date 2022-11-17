@@ -22,7 +22,7 @@
   "Passed": "合格",
   "Your answer is correct": "答えは正しい",
   "Your answer is incorrect": "答えは間違っています",
-  "Start": "Start",
+  "Start": "スタート",
   "Submit": "提出",
   "Question": "質問",
   "Setting": "設定",
@@ -50,7 +50,7 @@
   "Continue": "続け",
   "Are you sure to log out of this device?": "このデバイスからログアウトしますか?",
   "Yes": "はい",
-  "Stay": "Stay",
+  "Stay": "キャンセル",
   "Save Changes": "変更を保存する",
   "This field cannot be empty": "このフィールドを空にすることはできません!",
   "Email is too short": "メールが短すぎます!",
@@ -70,5 +70,6 @@
   "Email already exists": "メールは既に存在します!",
   "At least 6 characters": "最低6文字",
   "Start Language": "日本語 🇯🇵",
-  "Change Language": "言語変更"
+  "Change Language": "言語変更",
+  "You have not done any exam yet.": "まだ受験していない。"
 }

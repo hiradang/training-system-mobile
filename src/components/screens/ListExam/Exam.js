@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {EXAM_STATUS} from '../../../constants';
-import {convertDate} from '../../../utils/converDate';
-import {useTranslation} from 'react-i18next';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { EXAM_STATUS } from '../../../constants';
+import { convertDate } from '../../../utils/converDate';
+import { useTranslation } from 'react-i18next';
 
 function Exam(props) {
-  const {subject, exam, onPress} = props;
+  const { subject, exam, onPress } = props;
   const [examStatus, setExamStatus] = useState();
   const [examStatusClass, setExamStatusClass] = useState();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (exam.status === EXAM_STATUS.PASS) {

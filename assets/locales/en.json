@@ -50,7 +50,7 @@
   "Continue": "Continue",
   "Are you sure to log out of this device?": "Are you sure to log out of this device?",
   "Yes": "Yes",
-  "Stay": "Stay",
+  "Stay": "Cancel",
   "Save Changes": "Save Changes",
   "This field cannot be empty": "This field cannot be empty!",
   "Email is too short": "Email is too short!",
@@ -70,5 +70,6 @@
   "Email already exists": "Email already exists!",
   "At least 6 characters": "at least 6 characters",
   "Start Language": "English 🇺🇸",
-  "Change Language": "Change Language"
+  "Change Language": "Change Language",
+  "You have not done any exam yet.": "You have not done any exam yet."
 }

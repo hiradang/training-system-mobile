@@ -31,7 +31,7 @@ const LanguageModal = props => {
                 status={language === 'Vietnamese' ? 'checked' : 'unchecked'}
                 onPress={() => onPress('Vietnamese')}
               />
-              <Text>{t('Vietnamese')} 🇻🇳</Text>
+              <Text style = {{color: "#000000"}}>{t('Vietnamese')} 🇻🇳</Text>
             </View>
             <View style={styles.rowWrapper}>
               <RadioButton
@@ -39,7 +39,7 @@ const LanguageModal = props => {
                 status={language === 'English' ? 'checked' : 'unchecked'}
                 onPress={() => onPress('English')}
               />
-              <Text>{t('English')} 🇺🇸</Text>
+              <Text style = {{color: "#000000"}}>{t('English')} 🇺🇸</Text>
             </View>
             <View style={styles.rowWrapper}>
               <RadioButton
@@ -47,7 +47,7 @@ const LanguageModal = props => {
                 status={language === 'Japanese' ? 'checked' : 'unchecked'}
                 onPress={() => onPress('Japanese')}
               />
-              <Text>{t('Japanese')} 🇯🇵</Text>
+              <Text style = {{color: "#000000"}}>{t('Japanese')} 🇯🇵</Text>
             </View>
           </View>
         </View>

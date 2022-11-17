@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -6,22 +6,21 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {questionApi, examApi} from '../services/api';
+import { questionApi, examApi } from '../services/api';
 import DoingQuestion from '../components/screens/DoExam/DoingQuestion';
 import moment from 'moment';
 import CountDown from 'react-native-countdown-component';
 import ConfirmModal from '../components/common/ConfirmModal';
-import {useSelector} from 'react-redux';
-import {useTranslation} from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-function DoExam({route, navigation}) {
-  const {examId} = route.params;
+function DoExam({ route, navigation }) {
+  const { examId, subject, userId } = route.params;
   const [questions, setQuestions] = useState([]);
   const [isShow, setShowModal] = useState(false);
   const [remainingTimeInSeconds, setRemainingTimeInSeconds] = useState(null);
-  const {examData} = useSelector(state => state.taskReducer);
-  const {t} = useTranslation();
-
+  const { examData } = useSelector(state => state.taskReducer);
+  const { t } = useTranslation();
   useEffect(() => {
     questionApi.getQuestions(examId).then(res => {
       setQuestions(res.data.list_question);
@@ -40,8 +39,14 @@ function DoExam({route, navigation}) {
   };
 
   const handleSubmit = () => {
-    examApi.submitExam(examId, {question: examData}).then(res => {
-      navigation.goBack();
+    setShowModal(false);
+    examApi.submitExam(examId, { question: examData }).then(res => {
+      navigation.replace("ListExam", {
+        reload: true,
+        subject: subject,
+        title: subject.name,
+        userId: userId,
+      });
     });
   };
 

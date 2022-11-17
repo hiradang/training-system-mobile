@@ -14,11 +14,11 @@ function Question(props) {
         <Text style={styles.questionContent}>
           {t('Question')} {index + 1}: {question.question_content}
         </Text>
-        {question.image && (
+        {question.img && (
           <Image
             style={styles.image}
             source={{
-              uri: question.image,
+              uri: question.img,
             }}
           />
         )}

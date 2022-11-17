@@ -1,19 +1,22 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {ScrollView, View, Text, StyleSheet} from 'react-native';
-import {examApi} from '../services/api';
-import {EXAM_STATUS} from '../constants';
-import {useFocusEffect} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { examApi } from '../services/api';
+import { EXAM_STATUS } from '../constants';
+import { useFocusEffect } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import { ActivityIndicator } from 'react-native';
 
 import CustomButton from '../components/common/CustomButton';
 import SubjectInfo from '../components/screens/ListExam/SubjectInfo';
 import Exam from '../components/screens/ListExam/Exam';
 import Toast from 'react-native-toast-message';
 
-function ListExam({route, navigation}) {
-  const {subject, userId} = route.params;
-  const [exams, setExams] = useState([]);
-  const {t} = useTranslation();
+function ListExam({ route, navigation }) {
+  const { subject, userId } = route.params;
+  const [exams, setExams] = useState(null);
+  const [reload, setReload] = useState(false);
+  const [newExam, setNewExam] = useState(0);
+  const { t } = useTranslation();
 
   const examOnPress = exam => {
     if (exam.status === EXAM_STATUS.READY) {
@@ -21,11 +24,15 @@ function ListExam({route, navigation}) {
         subject: subject,
         exam: exam,
         title: subject.name,
+        userId: userId
       });
     } else if (exam.status === EXAM_STATUS.DOING) {
-      navigation.navigate('DoExam', {
+      navigation.replace('DoExam', {
+        onGoBack: () => setReload(!reload),
         title: subject.name,
         examId: exam.id,
+        subject: subject,
+        userId: userId
       });
     } else if (
       exam.status === EXAM_STATUS.FAILED ||
@@ -38,19 +45,18 @@ function ListExam({route, navigation}) {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setExams([]);
-      examApi.getListExams(subject.id, userId).then(res => {
-        setExams(res.data);
-      });
-    }, []),
-  );
+  useEffect(() => {
+    setExams(null)
+    examApi.getListExams(subject.id, userId).then(res => {
+      setExams(res.data);
+    });
+  }, [newExam]);
 
   const creatNewExam = () => {
     examApi.createExam(subject.id, userId).then(res => {
-      let newExam = {...res.data, status: 'ready'};
-      setExams(preExams => [newExam, ...preExams]);
+      setNewExam(pre => pre + 1)
+      // let newExam = { ...res.data, status: 'ready', id: res.data.exam_id, user_id: userId };
+      // setExams(preExams => [...preExams, newExam]);
       Toast.show({
         type: 'successToast',
         text1: t('Create new exam successfully'),
@@ -66,7 +72,7 @@ function ListExam({route, navigation}) {
         <CustomButton
           text={t('Practice')}
           onPressFunc={creatNewExam}
-          textStyles={{color: 'white'}}
+          textStyles={{ color: 'white' }}
           buttonStyles={{
             backgroundColor: '#000000',
             width: '80%',
@@ -77,7 +83,7 @@ function ListExam({route, navigation}) {
         />
       </View>
 
-      {exams.length > 0 ? (
+      {exams !== null && exams.length > 0 && (
         exams.map((exam, index) => (
           <Exam
             key={index}
@@ -86,13 +92,25 @@ function ListExam({route, navigation}) {
             onPress={() => examOnPress(exam)}
           />
         ))
-      ) : (
-        <View>
-          <Text style={styles.noExamText}>
-            {t('You haven not done any exam yet.')}
-          </Text>
-        </View>
       )}
+      {exams !== null && exams.length === 0 &&
+        (
+          <View>
+            <Text style={styles.noExamText}>
+              {t('You have not done any exam yet.')}
+            </Text>
+          </View>
+        )
+      }
+      {exams === null &&
+        (
+          <View style={{ marginTop: 30 }}>
+            <ActivityIndicator size="large" color="#ffffff" >
+            </ActivityIndicator>
+          </View>
+        )
+      }
+
     </ScrollView>
   );
 }

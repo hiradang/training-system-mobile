@@ -50,7 +50,7 @@
   "Continue": "Tiếp tục",
   "Are you sure to log out of this device?": "Bạn có chắc muốn đăng xuất khỏi thiết bị này không?",
   "Yes": "Có",
-  "Stay": "Stay",
+  "Stay": "Hủy",
   "Save Changes": "Lưu thay đổi",
   "This field cannot be empty": "Trường này không được để trống!",
   "Email is too short": "Địa chỉ email quá ngắn!",
@@ -70,5 +70,6 @@
   "Email already exists": "Email đã tồn tại!",
   "At least 6 characters": "ít nhất 6 ký tự",
   "Start Language": "Tiếng Việt 🇻🇳",
-  "Change Language": "Thay đổi ngôn ngữ"
+  "Change Language": "Thay đổi ngôn ngữ",
+  "You have not done any exam yet.": "Bạn chưa làm bài thi nào."
 }

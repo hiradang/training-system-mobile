@@ -12,11 +12,11 @@ function DoingQuestion(props) {
         <Text style={styles.questionContent}>
           Câu hỏi {index + 1}: {question.question_content}
         </Text>
-        {question.image && (
+        {question.img && (
           <Image
             style={styles.image}
             source={{
-              uri: question.image,
+              uri: question.img,
             }}
           />
         )}
