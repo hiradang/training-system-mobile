@@ -15,6 +15,7 @@ function DoingQuestion(props) {
         {question.img && (
           <Image
             style={styles.image}
+            resizeMode = 'contain'
             source={{
               uri: question.img,
             }}

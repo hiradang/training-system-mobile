@@ -17,6 +17,7 @@ function Question(props) {
         {question.img && (
           <Image
             style={styles.image}
+            resizeMode = 'contain'
             source={{
               uri: question.img,
             }}
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
   },
-  image: {
+  image: { 
     width: '100%',
     height: 400,
     marginTop: 10,

@@ -165,6 +165,7 @@ const App = () => {
             options={({ navigation }) => ({
               headerShown: true,
               title: t('App Title'),
+              headerLeft: () => (<></>),
               headerRight: () => (
                 <AntDesign
                   name="setting"
@@ -181,8 +182,12 @@ const App = () => {
           <Stack.Screen
             name="ListExam"
             component={ListExam}
-            options={({route}) => ({
+            options={({ navigation, route }) => ({
               headerShown: true,
+              headerLeft: () => (
+                <AntDesign name="arrowleft" size={25} color="#000000" style={{ marginLeft: 10 }} onPress={() =>
+                  navigation.replace("Training System")} />
+              ),
               title: route.params.title,
               upperCaseLabel: true,
               headerTitleStyle: {
@@ -234,9 +239,8 @@ const App = () => {
             options={({ navigation, route }) => ({
               headerShown: true,
               headerLeft: () => (
-                <AntDesign name="arrowleft" size={25} color="#000000" style= {{marginLeft: 10}} onPress={() =>
+                <AntDesign name="arrowleft" size={25} color="#000000" style={{ marginLeft: 10 }} onPress={() =>
                   navigation.replace("ListExam", {
-                    reload: true,
                     subject: route.params.subject,
                     title: route.params.subject.name,
                     userId: route.params.userId,

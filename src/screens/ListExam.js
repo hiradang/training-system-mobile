@@ -28,7 +28,6 @@ function ListExam({ route, navigation }) {
       });
     } else if (exam.status === EXAM_STATUS.DOING) {
       navigation.replace('DoExam', {
-        onGoBack: () => setReload(!reload),
         title: subject.name,
         examId: exam.id,
         subject: subject,
