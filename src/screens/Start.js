@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import CustomButton from '../components/common/CustomButton';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LanguageModal from '../components/common/LanguageModal';
-import { changeLanguageUtils } from '../utils/changeLanguage';
-import { LANGUAGE_CODE } from '../constants';
+import {changeLanguageUtils} from '../utils/changeLanguage';
+import {LANGUAGE_CODE} from '../constants';
 
-function Start({ navigation }) {
-  const { t } = useTranslation();
+function Start({navigation}) {
+  const {t} = useTranslation();
   const [isShow, setShow] = useState(false);
   const [language, setLanguage] = useState('Vietnamese');
   const handleOnPress = newLanguage => {
@@ -28,7 +28,7 @@ function Start({ navigation }) {
         const languageObject = JSON.parse(language);
         if (languageObject) setLanguage(languageObject.language);
       });
-    })
+    });
   }, []);
 
   return (
@@ -54,22 +54,22 @@ function Start({ navigation }) {
         <CustomButton
           buttonStyles={{
             backgroundColor: '#000000',
-            width: '60%',
+            width: '70%',
             height: 60,
             marginTop: 20,
           }}
-          textStyles={{ color: 'white' }}
+          textStyles={{color: 'white'}}
           text={t('Sign Up')}
           onPressFunc={() => navigation.navigate('Signup')}
         />
         <CustomButton
           buttonStyles={{
             backgroundColor: '#000000',
-            width: '60%',
+            width: '70%',
             height: 60,
             marginTop: 20,
           }}
-          textStyles={{ color: 'white' }}
+          textStyles={{color: 'white'}}
           text={t('Log In')}
           onPressFunc={() => navigation.navigate('Login')}
         />

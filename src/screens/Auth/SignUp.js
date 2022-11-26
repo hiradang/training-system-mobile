@@ -29,7 +29,7 @@ function SignUp({navigation}) {
   const validateEmail = value => {
     if (!value) {
       setErrorEmail(t('This field cannot be empty'));
-    } else if (value.length < 10) {
+    } else if (value.length < 6) {
       setErrorEmail(t('Email is too short'));
     } else if (value.length > 30) {
       setErrorEmail(t('Email is too long'));
@@ -50,7 +50,7 @@ function SignUp({navigation}) {
   const validateName = value => {
     if (!value) {
       setErrorName(t('This field cannot be empty'));
-    } else if (value.length < 10) {
+    } else if (value.length < 6) {
       setErrorName(t('Username is too short'));
     } else if (value.length > 30) {
       setErrorName(t('Username is too long'));
